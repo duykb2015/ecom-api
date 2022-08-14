@@ -1,15 +1,17 @@
 package entity
 
+import "time"
+
 type Product struct {
-	ID                string `json:"id" db:"id"`
-	Name              string `json:"name" db:"name"`
-	Slug              string `json:"slug" db:"slug"`
-	Descriptions      string `json:"descriptions" db:"descriptions"`
-	ShortDescriptions string `json:"short_descriptions" db:"short_descriptions"`
-	Images            string `json:"images" db:"images"`
-	Price             int    `json:"price" db:"price"`
-	Quantity          int    `json:"quantity" db:"quantity"`
-	Status            int    `json:"status" db:"status"`
-	CreatedAt         string `json:"created_at" db:"created_at"`
-	UpdatedAt         string `json:"updated_at" db:"updated_at"`
+	ID                   uint      `gorm:"primary_key"`
+	AdminID              uint      `gorm:"column:admin_id"`
+	CategoryID           uint      `gorm:"column:category_id"`
+	Name                 string    `gorm:"column:name"`
+	Slug                 string    `gorm:"column:slug"`
+	AdditionalInfomation string    `gorm:"column:additional_infomation"`
+	SupportInfomation    string    `gorm:"column:support_infomation"`
+	Description          string    `gorm:"column:description"`
+	Status               uint      `gorm:"column:status"`
+	CreatedAt            time.Time `gorm:"column:created_at"`
+	UpdatedAt            time.Time `gorm:"column:updated_at"`
 }

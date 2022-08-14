@@ -1,22 +1,21 @@
 package app
 
 import (
-	"database/sql"
-
 	v1 "github.com/duykb2015/login-api/internal/controller/http/v1"
 	"github.com/duykb2015/login-api/internal/usecase/repo"
 	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func Run() {
 	gin.SetMode(gin.ReleaseMode)
 
-	db, err := sql.Open("mysql", "root:@/ecommercial")
+	dns := "root:1@tcp(localhost:3306)/ecommerce?charset=utf8&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
-	defer db.Close()
 
 	handler := gin.Default()
 	v1.NewRouter(handler, repo.New(db))
