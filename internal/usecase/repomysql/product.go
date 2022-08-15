@@ -1,7 +1,7 @@
 package repomysql
 
 import (
-	"github.com/duykb2015/login-api/internal/entity"
+	"github.com/duykb2015/ecom-api/internal/entity"
 	"gorm.io/gorm"
 )
 

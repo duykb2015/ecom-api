@@ -1,6 +1,6 @@
 package usecase
 
-import "github.com/duykb2015/login-api/internal/entity"
+import "github.com/duykb2015/ecom-api/internal/entity"
 
 type ProductUsecase struct {
 	repo ProductRepo

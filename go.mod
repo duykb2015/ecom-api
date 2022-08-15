@@ -1,4 +1,4 @@
-module github.com/duykb2015/login-api
+module github.com/duykb2015/ecom-api
 
 go 1.18
 

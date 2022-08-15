@@ -1,7 +1,16 @@
 package main
 
-import "github.com/duykb2015/login-api/internal/app"
+import (
+	"log"
+
+	"github.com/duykb2015/ecom-api/config"
+	"github.com/duykb2015/ecom-api/internal/app"
+)
 
 func main() {
-	app.Run()
+	cfg, err := config.NewConfig()
+	if err != nil {
+		log.Fatalf("Config error: %s", err)
+	}
+	app.Run(cfg)
 }

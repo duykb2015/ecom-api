@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/duykb2015/login-api/internal/usecase"
+	"github.com/duykb2015/ecom-api/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
 
