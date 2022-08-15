@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/duykb2015/ecom-api/config"
@@ -13,10 +12,9 @@ import (
 )
 
 func Run(cfg *config.Config) {
-	fmt.Print(cfg.ConnMaxLifeTime)
+
 	gin.SetMode(gin.ReleaseMode)
 
-	return
 	db, err := mysql.New(&cfg.MySQL)
 	if err != nil {
 		log.Fatalf("app - Run - mysql.New: %s", err)
