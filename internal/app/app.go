@@ -1,18 +1,17 @@
 package app
 
 import (
+	"github.com/duykb2015/login-api/config"
 	v1 "github.com/duykb2015/login-api/internal/controller/http/v1"
 	"github.com/duykb2015/login-api/internal/usecase/repomysql"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
-func Run(cfg *Config) {
+func Run(cfg *config.Config) {
 	gin.SetMode(gin.ReleaseMode)
 
-	dns := "root:1@tcp(localhost:3306)/ecommerce?charset=utf8&parseTime=True&loc=Local"
-	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{})
+	db, err := mysql.New(&cfg.MySQL)
 	if err != nil {
 		panic(err.Error())
 	}
