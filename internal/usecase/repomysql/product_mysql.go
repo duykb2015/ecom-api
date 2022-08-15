@@ -1,4 +1,4 @@
-package repo
+package repomysql
 
 import (
 	"github.com/duykb2015/login-api/internal/entity"
