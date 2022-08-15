@@ -9,7 +9,7 @@ type ProductRepo struct {
 	*gorm.DB
 }
 
-func New(db *gorm.DB) *ProductRepo {
+func NewProductRepo(db *gorm.DB) *ProductRepo {
 	return &ProductRepo{db}
 }
 

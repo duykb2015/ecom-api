@@ -6,7 +6,6 @@ type (
 	// ProductUsecase interface
 	ProductRepo interface {
 		GetAllProduct() ([]entity.Product, error)
-		GetProductByID(id string) ([]entity.Product, error)
 	}
 
 	MenuRepo interface {

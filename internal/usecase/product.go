@@ -6,10 +6,14 @@ type ProductUsecase struct {
 	repo ProductRepo
 }
 
-func New(r ProductRepo) *ProductUsecase {
+func NewProduct(r ProductRepo) *ProductUsecase {
 	return &ProductUsecase{r}
 }
 
-func (p *ProductUsecase) Product() ([]entity.Product, error) {
+func (p *ProductUsecase) GetAllProduct() ([]entity.Product, error) {
 	return p.repo.GetAllProduct()
+}
+
+func (p *ProductUsecase) Menu() ([]entity.Menu, error) {
+	return nil, nil //p.repo.GetAllMenu()
 }
