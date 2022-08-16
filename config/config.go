@@ -8,7 +8,7 @@ type (
 	}
 
 	MySQL struct {
-		URI             string `env:"MYSQL_URI"`
+		URI             string `env:"MYSQL_URI,notEmpty" envDefault:"root:1@tcp(localhost:3306)/ecommerce?parseTime=true"`
 		MaxIdleConns    int    `env:"MYSQL_MAX_IDLE_CONNS" envDefault:"100"`
 		MaxOpenConns    int    `env:"MYSQL_OPEN_CONNS" envDefault:"100"`
 		ConnMaxLifeTime int    `env:"MYSQL_CONN_MAX_LIFE_TIME" envDefault:"149"`
@@ -22,5 +22,6 @@ func NewConfig() (*Config, error) {
 	if err := env.Parse(cfg); err != nil {
 		return nil, err
 	}
+
 	return cfg, nil
 }

@@ -12,7 +12,7 @@ type ProductRoutes struct {
 	p usecase.ProductRepo
 }
 
-func newProductRoutes(handler *gin.RouterGroup, p usecase.ProductRepo) {
+func NewProductRoutes(handler *gin.RouterGroup, p usecase.ProductRepo) {
 	r := &ProductRoutes{p: p}
 	h := handler.Group("product")
 	{

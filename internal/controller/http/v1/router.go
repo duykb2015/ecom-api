@@ -5,13 +5,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter(handler *gin.Engine, p usecase.ProductRepo) {
+func NewRouter(handler *gin.Engine, p usecase.ProductRepo, m usecase.MenuRepo) {
 
 	handler.Use(gin.Logger())
 	handler.Use(gin.Recovery())
 
 	h := handler.Group("/v1")
 	{
-		newProductRoutes(h, p)
+		NewProductRoutes(h, p)
+		NewMenuRoutes(h, m)
 	}
 }

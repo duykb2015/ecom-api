@@ -13,7 +13,3 @@ func NewProduct(r ProductRepo) *ProductUsecase {
 func (p *ProductUsecase) GetAllProduct() ([]entity.Product, error) {
 	return p.repo.GetAllProduct()
 }
-
-func (p *ProductUsecase) Menu() ([]entity.Menu, error) {
-	return nil, nil //p.repo.GetAllMenu()
-}
