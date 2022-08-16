@@ -8,8 +8,8 @@ type Product struct {
 	CategoryID           uint      `gorm:"column:category_id"`
 	Name                 string    `gorm:"column:name"`
 	Slug                 string    `gorm:"column:slug"`
-	AdditionalInfomation string    `gorm:"column:additional_infomation"`
-	SupportInfomation    string    `gorm:"column:support_infomation"`
+	AdditionalInfomation string    `gorm:"column:additional_information"`
+	SupportInfomation    string    `gorm:"column:support_information"`
 	Description          string    `gorm:"column:description"`
 	Status               uint      `gorm:"column:status"`
 	CreatedAt            time.Time `gorm:"column:created_at"`

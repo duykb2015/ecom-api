@@ -3,15 +3,15 @@ package entity
 import "time"
 
 type Menu struct {
-	ID        int       `gorm:"primary_key"`
-	ParentID  int       `gorm:"column:parent_id"`
-	Name      string    `gorm:"column:name"`
-	Slug      string    `gorm:"column:slug"`
-	Type      int       `gorm:"column:type"`
-	Status    int       `gorm:"column:status"`
-	CreatedAt time.Time `gorm:"column:created_at"`
-	UpdatedAt time.Time `gorm:"column:updated_at"`
-	// SubMenu   []SubMenu `gorm:"foreignkey:SubID; references: ID"`
+	ID        int        `gorm:"primary_key"`
+	ParentID  int        `gorm:"column:parent_id"`
+	Name      string     `gorm:"column:name"`
+	Slug      string     `gorm:"column:slug"`
+	Type      int        `gorm:"column:type"`
+	Status    int        `gorm:"column:status"`
+	CreatedAt time.Time  `gorm:"column:created_at"`
+	UpdatedAt time.Time  `gorm:"column:updated_at"`
+	Category  []Category //`gorm:"foreignkey:SubID; references: ID"`
 }
 
 type SubMenu struct {
@@ -26,11 +26,20 @@ type SubMenu struct {
 }
 
 type Category struct {
-	CategoryID        int       `gorm:"primary_key; column:category_id"`
-	CategoryMenuID    int       `gorm:"column:category_menu_id"`
-	CategoryName      string    `gorm:"column:category_name"`
-	CategorySlug      string    `gorm:"column:category_slug"`
-	CategoryStatus    int       `gorm:"column:category_status"`
-	CategoryCreatedAt time.Time `gorm:"column:category_created_at"`
-	CategoryUpdatedAt time.Time `gorm:"column:category_updated_at"`
+	ID          int       `gorm:"primary_key; column:id"`
+	MenuID      int       `gorm:"column:menu_id"`
+	Name        string    `gorm:"column:name"`
+	Slug        string    `gorm:"column:slug"`
+	Status      int       `gorm:"column:status"`
+	CreatedAt   time.Time `gorm:"column:created_at"`
+	UpdatedAt   time.Time `gorm:"column:updated_at"`
+	ProductLine []ProductLine
+}
+
+type ProductLine struct {
+	ID         int    `gorm:"primary_key; column:id"`
+	CategoryID int    `gorm:"column:category_id"`
+	Name       string `gorm:"column:name"`
+	Slug       string `gorm:"column:slug"`
+	Status     int    `gorm:"column:status"`
 }
