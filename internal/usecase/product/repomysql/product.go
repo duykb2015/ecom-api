@@ -14,7 +14,14 @@ func NewProductRepo(db *gorm.DB) *ProductRepo {
 }
 
 func (p *ProductRepo) GetAllProduct() ([]entity.Product, error) {
-	entities := []entity.Product{}
-	p.Table("product").Find(&entities)
-	return entities, nil
+	product := []entity.Product{}
+	p.Table("product").Find(&product)
+	for i, val := range product {
+		p.Table("product_items").Where("product_id", val.ID).Find(&product[i].ProductItems)
+		for j, item := range product[i].ProductItems {
+			p.Table("product_item_colors").Where("product_item_id", item.ID).Find(&product[i].ProductItems[j].ProductItemColors)
+			p.Table("product_item_images").Where("product_item_id", item.ID).Find(&product[i].ProductItems[j].ProductItemImages)
+		}
+	}
+	return product, nil
 }
