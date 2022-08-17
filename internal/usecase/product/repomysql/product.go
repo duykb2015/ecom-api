@@ -25,3 +25,40 @@ func (p *ProductRepo) GetAllProduct() ([]entity.Product, error) {
 	}
 	return product, nil
 }
+
+func (p *ProductRepo) GetAllProductByCategory(slug string) ([]entity.Product, error) {
+	product := []entity.Product{}
+	p.Table("product").Where("category_id = ? AND status > ?", slug, 0).Find(&product)
+	for i, val := range product {
+		p.Table("product_items").Where("product_id", val.ID).Find(&product[i].ProductItems)
+		for j, item := range product[i].ProductItems {
+			p.Table("product_item_colors").Where("product_item_id", item.ID).Find(&product[i].ProductItems[j].ProductItemColors)
+			p.Table("product_item_images").Where("product_item_id", item.ID).Find(&product[i].ProductItems[j].ProductItemImages)
+		}
+	}
+	return product, nil
+}
+
+func (p *ProductRepo) GetAllProductByProductLine(slug string) ([]entity.Product, error) {
+	product := []entity.Product{}
+	p.Table("product").Where("product_line_id = ? AND status > ?", slug, 0).Find(&product)
+	for i, val := range product {
+		p.Table("product_items").Where("product_id", val.ID).Find(&product[i].ProductItems)
+		for j, item := range product[i].ProductItems {
+			p.Table("product_item_colors").Where("product_item_id", item.ID).Find(&product[i].ProductItems[j].ProductItemColors)
+			p.Table("product_item_images").Where("product_item_id", item.ID).Find(&product[i].ProductItems[j].ProductItemImages)
+		}
+	}
+	return product, nil
+}
+
+func (p *ProductRepo) GetProductBySlug(slug string) (entity.Product, error) {
+	product := entity.Product{}
+	p.Table("product").Where("slug", slug).Find(&product)
+	p.Table("product_items").Where("product_id", product.ID).Find(&product.ProductItems)
+	for i, val := range product.ProductItems {
+		p.Table("product_item_colors").Where("product_item_id", val.ID).Find(&product.ProductItems[i].ProductItemColors)
+		p.Table("product_item_images").Where("product_item_id", val.ID).Find(&product.ProductItems[i].ProductItemImages)
+	}
+	return product, nil
+}

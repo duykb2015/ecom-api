@@ -26,6 +26,6 @@ func Run(cfg *config.Config) {
 
 	handler := gin.Default()
 	v1.NewRouter(handler, productUsecase, menuUsecase)
-	handler.Run(":8080")
+	handler.Run(":8081")
 
 }

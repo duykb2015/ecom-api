@@ -13,3 +13,15 @@ func NewProduct(r ProductRepo) *ProductUsecase {
 func (p *ProductUsecase) GetAllProduct() ([]entity.Product, error) {
 	return p.repo.GetAllProduct()
 }
+
+func (p *ProductUsecase) GetAllProductByCategory(slug string) ([]entity.Product, error) {
+	return p.repo.GetAllProductByCategory(slug)
+}
+
+func (p *ProductUsecase) GetAllProductByProductLine(slug string) ([]entity.Product, error) {
+	return p.repo.GetAllProductByProductLine(slug)
+}
+
+func (p *ProductUsecase) GetProductBySlug(slug string) (entity.Product, error) {
+	return p.repo.GetProductBySlug(slug)
+}
