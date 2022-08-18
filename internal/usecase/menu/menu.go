@@ -10,6 +10,6 @@ func NewMenu(r MenuRepo) *MenuUsecase {
 	return &MenuUsecase{r}
 }
 
-func (m *MenuUsecase) GetAllMenu() ([]entity.Menu, error) {
+func (m *MenuUsecase) GetAllMenu() ([]entity.MenuRespond, error) {
 	return m.repo.GetAllMenu()
 }

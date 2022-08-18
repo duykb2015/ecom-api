@@ -8,7 +8,7 @@ type (
 	}
 
 	MySQL struct {
-		URI             string `env:"MYSQL_URI,notEmpty" envDefault:"root:1@tcp(localhost:3306)/ecommerce?parseTime=true"`
+		URI             string `env:"MYSQL_URI,notEmpty" envDefault:"root:@tcp(localhost:3306)/ecommerce?parseTime=true"`
 		MaxIdleConns    int    `env:"MYSQL_MAX_IDLE_CONNS" envDefault:"100"`
 		MaxOpenConns    int    `env:"MYSQL_OPEN_CONNS" envDefault:"100"`
 		ConnMaxLifeTime int    `env:"MYSQL_CONN_MAX_LIFE_TIME" envDefault:"149"`

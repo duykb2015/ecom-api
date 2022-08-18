@@ -11,15 +11,65 @@ import (
 type ProductRoutes struct {
 	p usecase.ProductRepo
 }
+type Product struct {
+	ID                   uint   `gorm:"primary_key"`
+	CategoryID           uint   `gorm:"column:category_id"`
+	Name                 string `gorm:"column:name"`
+	Slug                 string `gorm:"column:slug"`
+	AdditionalInfomation string `gorm:"column:additional_information"`
+	SupportInfomation    string `gorm:"column:support_information"`
+	Description          string `gorm:"column:description"`
+	Status               uint   `gorm:"column:status"`
+	ProductAttributes    []ProductAttributes
+	ProductItems         []ProductItems
+}
+
+type ProductItems struct {
+	ID                uint   `gorm:"primary_key"`
+	ProductID         uint   `gorm:"column:product_id"`
+	AdminID           uint   `gorm:"column:admin_id"`
+	Name              string `gorm:"column:name"`
+	Slug              string `gorm:"column:slug"`
+	Status            uint   `gorm:"column:status"`
+	ProductAttributes []ProductAttributes
+	ProductItemColors []ProductItemColors
+	ProductItemImages []ProductItemImages
+}
+
+type ProductAttributes struct {
+	ID             uint   `gorm:"primary_key"`
+	ProductID      uint   `gorm:"column:product_id"`
+	ProductItemsID uint   `gorm:"column:product_item_id"`
+	Name           string `gorm:"column:name"`
+	Key            string `gorm:"column:key"`
+	Value          string `gorm:"column:value"`
+}
+
+type ProductItemColors struct {
+	ID             uint    `gorm:"primary_key"`
+	ProductItemsID uint    `gorm:"column:product_item_id"`
+	Name           string  `gorm:"column:name"`
+	Hexcode        string  `gorm:"column:hexcode"`
+	Price          float64 `gorm:"column:price"`
+	Discount       float64 `gorm:"column:discount"`
+	Quantity       uint    `gorm:"column:quantity"`
+	Status         uint    `gorm:"column:status"`
+}
+
+type ProductItemImages struct {
+	ID             uint   `gorm:"primary_key"`
+	ProductItemsID uint   `gorm:"column:product_item_id"`
+	Name           string `gorm:"column:name"`
+}
 
 func NewProductRoutes(handler *gin.RouterGroup, p usecase.ProductRepo) {
 	r := &ProductRoutes{p: p}
 	h := handler.Group("product")
 	{
-		h.GET("/get-all", r.getAllProductLine)
-		h.GET("/get-by-category/:slug", r.getAllProductLineByCategory)
-		h.GET("/get-by-line/:id", r.getAllProductItemsByProductLine)
-		h.GET("/get-by-slug/:id/:slug", r.getProductItemBySlug)
+		h.GET("/", r.getAllProductLine)
+		h.GET("/category/:id", r.getAllProductLineByCategory)
+		h.GET("/line/:id", r.getAllProductItemsByProductLine)
+		h.GET("/info/:product_id/:product_item_id", r.getProductItemInfo)
 	}
 }
 
@@ -28,49 +78,20 @@ func (r *ProductRoutes) getAllProductLine(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err.Error(),
+			"error":  err.Error(),
+			"result": "",
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, product)
+	c.JSON(http.StatusOK, gin.H{
+		"error":  "success",
+		"result": product,
+	})
 
 }
 
 func (r *ProductRoutes) getAllProductLineByCategory(c *gin.Context) {
-	slug := c.Param("slug")
-	product, err := r.p.GetAllProductLineByCategory(slug)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err.Error(),
-		})
-		return
-	}
-
-	c.JSON(http.StatusOK, product)
-}
-
-func (r *ProductRoutes) getAllProductItemsByProductLine(c *gin.Context) {
-	slug, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-	product, err := r.p.GetAllProductItemsByProductLine(slug)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-	c.JSON(http.StatusOK, product)
-}
-
-func (r *ProductRoutes) getProductItemBySlug(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -78,15 +99,73 @@ func (r *ProductRoutes) getProductItemBySlug(c *gin.Context) {
 		})
 		return
 	}
-	slug := c.Param("slug")
-	product, err := r.p.GetProductItemBySlug(id, slug)
+	product, err := r.p.GetAllProductLineByCategory(id)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err.Error(),
+			"error": err.Error(),
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, product)
+	c.JSON(http.StatusOK, gin.H{
+		"error":  "success",
+		"result": product,
+	})
+}
+
+func (r *ProductRoutes) getAllProductItemsByProductLine(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	product, err := r.p.GetAllProductItemsByProductLine(id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"error":  "success",
+		"result": product,
+	})
+}
+
+func (r *ProductRoutes) getProductItemInfo(c *gin.Context) {
+	product_id, err := strconv.Atoi(c.Param("product_id"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":  err.Error(),
+			"result": "",
+		})
+		return
+	}
+
+	product_item_id, err := strconv.Atoi(c.Param("product_item_id"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":  err.Error(),
+			"result": "",
+		})
+		return
+	}
+
+	product, err := r.p.GetProductItemInfo(product_id, product_item_id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":  err.Error(),
+			"result": "",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error":  "success",
+		"result": product,
+	})
 }

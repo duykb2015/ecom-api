@@ -14,14 +14,14 @@ func (p *ProductUsecase) GetAllProductLine() ([]entity.Product, error) {
 	return p.repo.GetAllProductLine()
 }
 
-func (p *ProductUsecase) GetAllProductLineByCategory(slug string) ([]entity.Product, error) {
-	return p.repo.GetAllProductLineByCategory(slug)
+func (p *ProductUsecase) GetAllProductLineByCategory(id int) ([]entity.Product, error) {
+	return p.repo.GetAllProductLineByCategory(id)
 }
 
 func (p *ProductUsecase) GetAllProductItemsByProductLine(id int) ([]entity.Product, error) {
 	return p.repo.GetAllProductItemsByProductLine(id)
 }
 
-func (p *ProductUsecase) GetProductItemBySlug(id int, slug string) (entity.Product, error) {
-	return p.repo.GetProductItemBySlug(id, slug)
+func (p *ProductUsecase) GetProductItemInfo(product_id int, product_item_id int) (entity.Product, error) {
+	return p.repo.GetProductItemInfo(product_id, product_item_id)
 }

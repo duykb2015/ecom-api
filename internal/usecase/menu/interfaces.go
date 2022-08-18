@@ -6,6 +6,6 @@ type (
 	// ProductUsecase interface
 
 	MenuRepo interface {
-		GetAllMenu() ([]entity.Menu, error)
+		GetAllMenu() ([]entity.MenuRespond, error)
 	}
 )
