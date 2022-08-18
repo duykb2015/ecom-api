@@ -10,8 +10,4 @@ type (
 		GetAllProductByProductLine(slug string) ([]entity.Product, error)
 		GetProductBySlug(slug string) (entity.Product, error)
 	}
-
-	MenuRepo interface {
-		GetAllMenu() ([]entity.Menu, error)
-	}
 )
