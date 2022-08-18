@@ -14,6 +14,7 @@ type Product struct {
 	Status               uint      `gorm:"column:status"`
 	CreatedAt            time.Time `gorm:"column:created_at"`
 	UpdatedAt            time.Time `gorm:"column:updated_at"`
+	ProductAttributes    []ProductAttributes
 	ProductItems         []ProductItems
 }
 
@@ -26,8 +27,21 @@ type ProductItems struct {
 	Status            uint      `gorm:"column:status"`
 	CreatedAt         time.Time `gorm:"column:created_at"`
 	UpdatedAt         time.Time `gorm:"column:updated_at"`
+	ProductAttributes []ProductAttributes
 	ProductItemColors []ProductItemColors
 	ProductItemImages []ProductItemImages
+}
+
+type ProductAttributes struct {
+	ID             uint      `gorm:"primary_key"`
+	ProductID      uint      `gorm:"column:product_id"`
+	ProductItemsID uint      `gorm:"column:product_item_id"`
+	Name           string    `gorm:"column:name"`
+	Key            string    `gorm:"column:key"`
+	Value          string    `gorm:"column:value"`
+	Status         uint      `gorm:"column:status"`
+	CreatedAt      time.Time `gorm:"column:created_at"`
+	UpdatedAt      time.Time `gorm:"column:updated_at"`
 }
 
 type ProductItemColors struct {
