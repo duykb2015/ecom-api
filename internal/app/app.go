@@ -5,9 +5,10 @@ import (
 
 	"github.com/duykb2015/ecom-api/config"
 	v1 "github.com/duykb2015/ecom-api/internal/controller/http/v1"
-	"github.com/duykb2015/ecom-api/internal/usecase"
-	menu "github.com/duykb2015/ecom-api/internal/usecase/menu/repomysql"
-	product "github.com/duykb2015/ecom-api/internal/usecase/product/repomysql"
+	menuUsecase "github.com/duykb2015/ecom-api/internal/usecase/menu"
+	menuRepo "github.com/duykb2015/ecom-api/internal/usecase/menu/repomysql"
+	productUsecase "github.com/duykb2015/ecom-api/internal/usecase/product"
+	productRepo "github.com/duykb2015/ecom-api/internal/usecase/product/repomysql"
 	"github.com/duykb2015/ecom-api/pkg/db/mysql"
 	"github.com/gin-gonic/gin"
 )
@@ -21,11 +22,11 @@ func Run(cfg *config.Config) {
 		log.Fatalf("app - Run - mysql.New: %s", err)
 	}
 
-	productUsecase := usecase.NewProduct(product.NewProductRepo(db))
-	menuUsecase := usecase.NewMenu(menu.NewMenuRepo(db))
+	productUC := productUsecase.NewProduct(productRepo.NewProductRepo(db))
+	menuUC := menuUsecase.NewMenu(menuRepo.NewMenuRepo(db))
 
 	handler := gin.Default()
-	v1.NewRouter(handler, productUsecase, menuUsecase)
-	handler.Run(":8081")
+	v1.NewRouter(handler, productUC, menuUC)
+	handler.Run(":8080")
 
 }

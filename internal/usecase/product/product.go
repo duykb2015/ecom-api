@@ -10,18 +10,18 @@ func NewProduct(r ProductRepo) *ProductUsecase {
 	return &ProductUsecase{r}
 }
 
-func (p *ProductUsecase) GetAllProduct() ([]entity.Product, error) {
-	return p.repo.GetAllProduct()
+func (p *ProductUsecase) GetAllProductLine() ([]entity.Product, error) {
+	return p.repo.GetAllProductLine()
 }
 
-func (p *ProductUsecase) GetAllProductByCategory(slug string) ([]entity.Product, error) {
-	return p.repo.GetAllProductByCategory(slug)
+func (p *ProductUsecase) GetAllProductLineByCategory(slug string) ([]entity.Product, error) {
+	return p.repo.GetAllProductLineByCategory(slug)
 }
 
-func (p *ProductUsecase) GetAllProductByProductLine(slug string) ([]entity.Product, error) {
-	return p.repo.GetAllProductByProductLine(slug)
+func (p *ProductUsecase) GetAllProductItemsByProductLine(id int) ([]entity.Product, error) {
+	return p.repo.GetAllProductItemsByProductLine(id)
 }
 
-func (p *ProductUsecase) GetProductBySlug(slug string) (entity.Product, error) {
-	return p.repo.GetProductBySlug(slug)
+func (p *ProductUsecase) GetProductItemBySlug(id int, slug string) (entity.Product, error) {
+	return p.repo.GetProductItemBySlug(id, slug)
 }

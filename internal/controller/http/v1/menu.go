@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"github.com/duykb2015/ecom-api/internal/usecase"
+	usecase "github.com/duykb2015/ecom-api/internal/usecase/menu"
 	"github.com/gin-gonic/gin"
 )
 
