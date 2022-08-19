@@ -10,5 +10,6 @@ type (
 		GetAllProductItemsByProductLine(id int) ([]entity.Product, error)
 		//id Product Line Id, slug Product Item Slug
 		GetProductItemInfo(product_id int, product_item_id int) (entity.Product, error)
+		//a
 	}
 )

@@ -25,3 +25,5 @@ func (p *ProductUsecase) GetAllProductItemsByProductLine(id int) ([]entity.Produ
 func (p *ProductUsecase) GetProductItemInfo(product_id int, product_item_id int) (entity.Product, error) {
 	return p.repo.GetProductItemInfo(product_id, product_item_id)
 }
+
+//a

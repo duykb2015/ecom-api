@@ -23,6 +23,7 @@ func (p *ProductRepo) GetAllProductLineByCategory(id int) ([]entity.Product, err
 	product := []entity.Product{}
 	p.Table("product").Select("id, category_id, name, slug, status").Where("category_id = ? AND status > ?", id, 0).Find(&product)
 	return product, nil
+	//a
 }
 
 func (p *ProductRepo) GetAllProductItemsByProductLine(id int) ([]entity.Product, error) {

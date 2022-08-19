@@ -44,26 +44,25 @@ type ProductLine struct {
 }
 
 type MenuRespond struct {
-	Id       int
+	ID       int
 	Name     string
 	Slug     string
 	SubMenu  []SubMenuRespond
 	Category []CategoryRespond
 }
 type SubMenuRespond struct {
-	Id   int
+	ID   int
 	Name string
 	Slug string
 }
 type CategoryRespond struct {
-	Id          int
+	ID          int
 	Name        string
 	Slug        string
 	ProductLine []ProductLineRespond
 }
 type ProductLineRespond struct {
-	Id         int
-	CategoryId int
-	Name       string
-	Slug       string
+	ID   int
+	Name string
+	Slug string
 }
