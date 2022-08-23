@@ -6,4 +6,7 @@ type (
 	MenuRepo interface {
 		GetAllMenu() ([]entity.Menu, error)
 	}
+	Menu interface {
+		MenuRespond() ([]entity.MenuRespond, error)
+	}
 )

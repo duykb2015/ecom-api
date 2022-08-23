@@ -6,16 +6,16 @@ type MenuUsecase struct {
 	repo MenuRepo
 }
 
-func NewMenu(r MenuRepo) *MenuUsecase {
+func New(r MenuRepo) *MenuUsecase {
 	return &MenuUsecase{r}
 }
 
-func (m *MenuUsecase) GetAllMenu() ([]entity.MenuRespond, error) {
-	return ConvertData(m.repo.GetAllMenu())
-}
-
-func ConvertData(entites []entity.Menu, err error) ([]entity.MenuRespond, error) {
-	menu := []entity.MenuRespond{}
+func (uc *MenuUsecase) MenuRespond() ([]entity.MenuRespond, error) {
+	entites, err := uc.repo.GetAllMenu()
+	if err != nil {
+		return nil, err
+	}
+	menuRespond := []entity.MenuRespond{}
 	for _, val := range entites {
 		m := entity.MenuRespond{
 			ID:       val.ID,
@@ -46,7 +46,7 @@ func ConvertData(entites []entity.Menu, err error) ([]entity.MenuRespond, error)
 				})
 			}
 		}
-		menu = append(menu, m)
+		menuRespond = append(menuRespond, m)
 	}
-	return menu, nil
+	return menuRespond, nil
 }

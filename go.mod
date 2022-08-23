@@ -3,7 +3,7 @@ module github.com/duykb2015/ecom-api
 go 1.18
 
 require (
-	github.com/caarlos0/env/v6 v6.9.3
+	github.com/caarlos0/env/v6 v6.10.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/rs/zerolog v1.27.0
 	gorm.io/driver/mysql v1.3.5
@@ -33,4 +33,5 @@ require (
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

@@ -8,10 +8,10 @@ import (
 )
 
 type MenuRoutes struct {
-	m usecase.MenuRepo
+	m usecase.Menu
 }
 
-func NewMenuRoutes(handler *gin.RouterGroup, m usecase.MenuRepo) {
+func NewMenuRoutes(handler *gin.RouterGroup, m usecase.Menu) {
 	r := &MenuRoutes{m}
 	h := handler.Group("/menu")
 	{
@@ -21,7 +21,7 @@ func NewMenuRoutes(handler *gin.RouterGroup, m usecase.MenuRepo) {
 
 func (r *MenuRoutes) GetAllMenu(c *gin.Context) {
 
-	menu, err := r.m.GetAllMenu()
+	menu, err := r.m.MenuRespond()
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
