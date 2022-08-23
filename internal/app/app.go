@@ -1,7 +1,11 @@
 package app
 
 import (
+	"fmt"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/duykb2015/ecom-api/config"
 	v1 "github.com/duykb2015/ecom-api/internal/controller/http/v1"
@@ -29,4 +33,22 @@ func Run(cfg *config.Config) {
 	v1.NewRouter(handler, productUC, menuUC)
 	handler.Run(":8080")
 
+	// Waiting signal
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
+
+	select {
+	case s := <-interrupt:
+		l.Info("app - Run - signal: " + s.String())
+	case err = <-httpServer.Notify():
+		l.Error(fmt.Errorf("app - Run - httpServer.Notify: %w", err))
+	case err = <-rmqServer.Notify():
+		l.Error(fmt.Errorf("app - Run - rmqServer.Notify: %w", err))
+	}
+
+	// Shutdown
+	err = httpServer.Shutdown()
+	if err != nil {
+		l.Error(fmt.Errorf("app - Run - httpServer.Shutdown: %w", err))
+	}
 }
