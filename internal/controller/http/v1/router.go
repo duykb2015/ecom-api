@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter(handler *gin.Engine, p product.ProductRepo, m menu.Menu) {
+func NewRouter(handler *gin.Engine, p product.Product, m menu.Menu) {
 
 	handler.Use(gin.Logger())
 	handler.Use(gin.Recovery())

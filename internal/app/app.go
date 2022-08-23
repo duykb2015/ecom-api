@@ -23,7 +23,7 @@ func Run(cfg *config.Config) {
 		log.Fatalf("app - Run - mysql.New: %s", err)
 	}
 
-	productUC := productUsecase.NewProduct(productRepo.NewProductRepo(db))
+	productUC := productUsecase.New(productRepo.New(db))
 	menuUC := menuUsecase.New(menuRepo.New(db))
 
 	handler := gin.Default()

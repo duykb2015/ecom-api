@@ -74,8 +74,8 @@ type ProductRespond struct {
 	SupportInfomation    string
 	Description          string
 	Status               uint
-	Attributes           []ProductAttributes
-	Items                []ProductItems
+	Attributes           []ProductAttributesRespond
+	Items                []ProductItemsRespond
 }
 type ProductItemsRespond struct {
 	ID         uint

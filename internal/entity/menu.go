@@ -62,7 +62,8 @@ type CategoryRespond struct {
 	ProductLine []ProductLineRespond
 }
 type ProductLineRespond struct {
-	ID   int
-	Name string
-	Slug string
+	ID     int
+	Name   string
+	Slug   string
+	Status int
 }

@@ -9,72 +9,22 @@ import (
 )
 
 type ProductRoutes struct {
-	p usecase.ProductRepo
-}
-type Product struct {
-	ID                   uint   `gorm:"primary_key"`
-	CategoryID           uint   `gorm:"column:category_id"`
-	Name                 string `gorm:"column:name"`
-	Slug                 string `gorm:"column:slug"`
-	AdditionalInfomation string `gorm:"column:additional_information"`
-	SupportInfomation    string `gorm:"column:support_information"`
-	Description          string `gorm:"column:description"`
-	Status               uint   `gorm:"column:status"`
-	ProductAttributes    []ProductAttributes
-	ProductItems         []ProductItems
+	p usecase.Product
 }
 
-type ProductItems struct {
-	ID                uint   `gorm:"primary_key"`
-	ProductID         uint   `gorm:"column:product_id"`
-	AdminID           uint   `gorm:"column:admin_id"`
-	Name              string `gorm:"column:name"`
-	Slug              string `gorm:"column:slug"`
-	Status            uint   `gorm:"column:status"`
-	ProductAttributes []ProductAttributes
-	ProductItemColors []ProductItemColors
-	ProductItemImages []ProductItemImages
-}
-
-type ProductAttributes struct {
-	ID             uint   `gorm:"primary_key"`
-	ProductID      uint   `gorm:"column:product_id"`
-	ProductItemsID uint   `gorm:"column:product_item_id"`
-	Name           string `gorm:"column:name"`
-	Key            string `gorm:"column:key"`
-	Value          string `gorm:"column:value"`
-}
-
-type ProductItemColors struct {
-	ID             uint    `gorm:"primary_key"`
-	ProductItemsID uint    `gorm:"column:product_item_id"`
-	Name           string  `gorm:"column:name"`
-	Hexcode        string  `gorm:"column:hexcode"`
-	Price          float64 `gorm:"column:price"`
-	Discount       float64 `gorm:"column:discount"`
-	Quantity       uint    `gorm:"column:quantity"`
-	Status         uint    `gorm:"column:status"`
-}
-
-type ProductItemImages struct {
-	ID             uint   `gorm:"primary_key"`
-	ProductItemsID uint   `gorm:"column:product_item_id"`
-	Name           string `gorm:"column:name"`
-}
-
-func NewProductRoutes(handler *gin.RouterGroup, p usecase.ProductRepo) {
+func NewProductRoutes(handler *gin.RouterGroup, p usecase.Product) {
 	r := &ProductRoutes{p: p}
 	h := handler.Group("product")
 	{
-		h.GET("/", r.getAllProductLine)
-		h.GET("/category/:id", r.getAllProductLineByCategory)
-		h.GET("/line/:id", r.getAllProductItemsByProductLine)
-		h.GET("/info/:product_id/:product_item_id", r.getProductItemInfo)
+		h.GET("/", r.getAll)
+		h.GET("/category/:id", r.getByCategory)
+		h.GET("/line/:id", r.getAllItems)
+		h.GET("/info/:product_id/:product_item_id", r.getItemInfo)
 	}
 }
 
-func (r *ProductRoutes) getAllProductLine(c *gin.Context) {
-	product, err := r.p.GetAllProductLine()
+func (r *ProductRoutes) getAll(c *gin.Context) {
+	product, err := r.p.GetAll()
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -91,7 +41,7 @@ func (r *ProductRoutes) getAllProductLine(c *gin.Context) {
 
 }
 
-func (r *ProductRoutes) getAllProductLineByCategory(c *gin.Context) {
+func (r *ProductRoutes) getByCategory(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -99,7 +49,7 @@ func (r *ProductRoutes) getAllProductLineByCategory(c *gin.Context) {
 		})
 		return
 	}
-	product, err := r.p.GetAllProductLineByCategory(id)
+	product, err := r.p.GetByCategory(id)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -114,7 +64,7 @@ func (r *ProductRoutes) getAllProductLineByCategory(c *gin.Context) {
 	})
 }
 
-func (r *ProductRoutes) getAllProductItemsByProductLine(c *gin.Context) {
+func (r *ProductRoutes) getAllItems(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -122,7 +72,7 @@ func (r *ProductRoutes) getAllProductItemsByProductLine(c *gin.Context) {
 		})
 		return
 	}
-	product, err := r.p.GetAllProductItemsByProductLine(id)
+	product, err := r.p.Items(id)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -136,7 +86,7 @@ func (r *ProductRoutes) getAllProductItemsByProductLine(c *gin.Context) {
 	})
 }
 
-func (r *ProductRoutes) getProductItemInfo(c *gin.Context) {
+func (r *ProductRoutes) getItemInfo(c *gin.Context) {
 	product_id, err := strconv.Atoi(c.Param("product_id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -155,7 +105,7 @@ func (r *ProductRoutes) getProductItemInfo(c *gin.Context) {
 		return
 	}
 
-	product, err := r.p.GetProductItemInfo(product_id, product_item_id)
+	product, err := r.p.ItemInfo(product_id, product_item_id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":  err.Error(),

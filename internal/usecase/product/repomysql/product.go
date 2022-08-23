@@ -9,24 +9,23 @@ type ProductRepo struct {
 	*gorm.DB
 }
 
-func NewProductRepo(db *gorm.DB) *ProductRepo {
+func New(db *gorm.DB) *ProductRepo {
 	return &ProductRepo{db}
 }
 
-func (p *ProductRepo) GetAllProductLine() ([]entity.Product, error) {
+func (p *ProductRepo) GetAllProduct() ([]entity.Product, error) {
 	product := []entity.Product{}
 	p.Table("product").Where("status > ?", 0).Find(&product)
 	return product, nil
 }
 
-func (p *ProductRepo) GetAllProductLineByCategory(id int) ([]entity.Product, error) {
+func (p *ProductRepo) GetAllProductByCategory(id int) ([]entity.Product, error) {
 	product := []entity.Product{}
 	p.Table("product").Select("id, category_id, name, slug, status").Where("category_id = ? AND status > ?", id, 0).Find(&product)
 	return product, nil
-	//a
 }
 
-func (p *ProductRepo) GetAllProductItemsByProductLine(id int) ([]entity.Product, error) {
+func (p *ProductRepo) GetAllProductItemsByProduct(id int) ([]entity.Product, error) {
 	product := []entity.Product{}
 	p.Table("product").Select("id, category_id, name, slug, status").Where("id = ? AND status > ?", id, 0).Find(&product)
 	for i, val := range product {
