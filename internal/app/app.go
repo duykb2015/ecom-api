@@ -13,7 +13,8 @@ import (
 	menuRepo "github.com/duykb2015/ecom-api/internal/usecase/menu/repomysql"
 	productUsecase "github.com/duykb2015/ecom-api/internal/usecase/product"
 	productRepo "github.com/duykb2015/ecom-api/internal/usecase/product/repomysql"
-	"github.com/duykb2015/ecom-api/pkg/db/mysql"
+	"github.com/duykb2015/ecom-api/pkg/httpserver"
+	"github.com/duykb2015/ecom-api/pkg/mysql"
 	"github.com/gin-gonic/gin"
 )
 
@@ -33,6 +34,8 @@ func Run(cfg *config.Config) {
 	v1.NewRouter(handler, productUC, menuUC)
 	handler.Run(":8080")
 
+	httpServer := httpserver.New(handler, httpserver.Port(cfg.HTTP.Port))
+
 	// Waiting signal
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
@@ -42,8 +45,6 @@ func Run(cfg *config.Config) {
 		l.Info("app - Run - signal: " + s.String())
 	case err = <-httpServer.Notify():
 		l.Error(fmt.Errorf("app - Run - httpServer.Notify: %w", err))
-	case err = <-rmqServer.Notify():
-		l.Error(fmt.Errorf("app - Run - rmqServer.Notify: %w", err))
 	}
 
 	// Shutdown
