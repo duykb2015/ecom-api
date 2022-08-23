@@ -14,6 +14,7 @@ import (
 	productUsecase "github.com/duykb2015/ecom-api/internal/usecase/product"
 	productRepo "github.com/duykb2015/ecom-api/internal/usecase/product/repomysql"
 	"github.com/duykb2015/ecom-api/pkg/httpserver"
+	"github.com/duykb2015/ecom-api/pkg/logger"
 	"github.com/duykb2015/ecom-api/pkg/mysql"
 	"github.com/gin-gonic/gin"
 )
@@ -21,6 +22,7 @@ import (
 func Run(cfg *config.Config) {
 
 	gin.SetMode(gin.ReleaseMode)
+	l := logger.New(cfg.Log.Level)
 
 	db, err := mysql.New(&cfg.MySQL)
 	if err != nil {

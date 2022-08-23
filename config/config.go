@@ -5,6 +5,16 @@ import "github.com/caarlos0/env/v6"
 type (
 	Config struct {
 		MySQL
+		Log
+		HTTP
+	}
+
+	Log struct {
+		Level string `env-required:"true" env:"LOG_LEVEL"  envDefault:"debug"`
+	}
+
+	HTTP struct {
+		Port string `env-required:"true" env:"HTTP_PORT" envDefault:"1993"`
 	}
 
 	MySQL struct {
