@@ -65,3 +65,47 @@ type ProductItemImages struct {
 	CreatedAt      time.Time `gorm:"column:created_at"`
 	UpdatedAt      time.Time `gorm:"column:updated_at"`
 }
+
+type ProductRespond struct {
+	ID                   uint
+	Name                 string
+	Slug                 string
+	AdditionalInfomation string
+	SupportInfomation    string
+	Description          string
+	Status               uint
+	Attributes           []ProductAttributesRespond
+	Items                []ProductItemsRespond
+}
+type ProductItemsRespond struct {
+	ID         uint
+	Name       string
+	Slug       string
+	Status     uint
+	Attributes []ProductAttributesRespond
+	Colors     []ProductItemColorsRespond
+	Images     []ProductItemImagesRespond
+}
+
+type ProductAttributesRespond struct {
+	ID     uint
+	Name   string
+	Key    string
+	Value  string
+	Status uint
+}
+
+type ProductItemColorsRespond struct {
+	ID       uint
+	Name     string
+	Hexcode  string
+	Price    float64
+	Discount float64
+	Quantity uint
+	Status   uint
+}
+
+type ProductItemImagesRespond struct {
+	ID   uint
+	Name string
+}

@@ -9,7 +9,7 @@ type MenuRepo struct {
 	db *gorm.DB
 }
 
-func NewMenuRepo(db *gorm.DB) *MenuRepo {
+func New(db *gorm.DB) *MenuRepo {
 	return &MenuRepo{db}
 }
 

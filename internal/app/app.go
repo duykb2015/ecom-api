@@ -19,14 +19,14 @@ func Run(cfg *config.Config) {
 
 	db, err := mysql.New(&cfg.MySQL)
 	if err != nil {
+
 		log.Fatalf("app - Run - mysql.New: %s", err)
 	}
 
-	productUC := productUsecase.NewProduct(productRepo.NewProductRepo(db))
-	menuUC := menuUsecase.NewMenu(menuRepo.NewMenuRepo(db))
+	productUC := productUsecase.New(productRepo.New(db))
+	menuUC := menuUsecase.New(menuRepo.New(db))
 
 	handler := gin.Default()
 	v1.NewRouter(handler, productUC, menuUC)
 	handler.Run(":8080")
-
 }
