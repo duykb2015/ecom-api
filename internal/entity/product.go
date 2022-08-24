@@ -102,6 +102,7 @@ type ProductItemColorsRespond struct {
 	Price    float64
 	Discount float64
 	Quantity uint
+	Status   uint
 }
 
 type ProductItemImagesRespond struct {

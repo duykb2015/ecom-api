@@ -100,8 +100,54 @@ func (uc *ProductUsecase) ItemInfo(product_id int, product_item_id int) (entity.
 		Attributes:           []entity.ProductAttributesRespond{},
 		Items:                []entity.ProductItemsRespond{},
 	}
+	for _, attribute := range entities.ProductAttributes {
+		product.Attributes = append(product.Attributes, entity.ProductAttributesRespond{
+			ID:     attribute.ID,
+			Name:   attribute.Name,
+			Key:    attribute.Key,
+			Value:  attribute.Value,
+			Status: attribute.Status,
+		})
+	}
+	for key, item := range entities.ProductItems {
+		product.Items = append(product.Items, entity.ProductItemsRespond{
+			ID:         item.ID,
+			Name:       item.Name,
+			Slug:       item.Slug,
+			Status:     item.Status,
+			Attributes: []entity.ProductAttributesRespond{},
+			Images:     []entity.ProductItemImagesRespond{},
+			Colors:     []entity.ProductItemColorsRespond{},
+		})
+
+		for _, attribute := range item.ProductAttributes {
+			product.Items[key].Attributes = append(product.Items[key].Attributes, entity.ProductAttributesRespond{
+				ID:     attribute.ID,
+				Name:   attribute.Name,
+				Key:    attribute.Key,
+				Value:  attribute.Value,
+				Status: attribute.Status,
+			})
+		}
+		for _, image := range item.ProductItemImages {
+			product.Items[key].Images = append(product.Items[key].Images, entity.ProductItemImagesRespond{
+				ID:   image.ID,
+				Name: image.Name,
+			})
+		}
+
+		for _, color := range item.ProductItemColors {
+			product.Items[key].Colors = append(product.Items[key].Colors, entity.ProductItemColorsRespond{
+				ID:       color.ID,
+				Name:     color.Name,
+				Hexcode:  color.Hexcode,
+				Price:    color.Price,
+				Discount: color.Discount,
+				Quantity: color.Quantity,
+				Status:   color.Status,
+			})
+		}
+	}
 
 	return product, nil
 }
-
-//a
