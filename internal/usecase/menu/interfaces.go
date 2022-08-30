@@ -2,11 +2,15 @@ package usecase
 
 import "github.com/duykb2015/ecom-api/internal/entity"
 
+// Xem lại cách đặt tên
 type (
 	MenuRepo interface {
-		GetAllMenu() ([]entity.Menu, error)
+		// GetAllMenu() ([]entity.Menu, error)
+		GetParents() ([]entity.Menu, error)
+		GetChildens(menuIDs []int) ([]entity.Menu, error)
 	}
 	Menu interface {
-		MenuRespond() ([]entity.MenuRespond, error)
+		Get() ([]entity.MenuResponse, error)
+		// MenuRespond() ([]entity.MenuRespond, error)
 	}
 )

@@ -8,9 +8,6 @@ import (
 
 func NewRouter(handler *gin.Engine, p product.Product, m menu.Menu) {
 
-	handler.Use(gin.Logger())
-	handler.Use(gin.Recovery())
-
 	h := handler.Group("/v1")
 	{
 		NewProductRoutes(h, p)

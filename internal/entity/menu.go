@@ -11,19 +11,6 @@ type Menu struct {
 	Status    int       `gorm:"column:status"`
 	CreatedAt time.Time `gorm:"column:created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at"`
-	SubMenu   []SubMenu
-	Category  []Category
-}
-type SubMenu struct {
-	ID        int       `gorm:"primary_key; column:sub_id"`
-	MenuID    int       `gorm:"column:id"`
-	ParentID  int       `gorm:"column:sub_parent_id"`
-	Name      string    `gorm:"column:sub_name"`
-	Slug      string    `gorm:"column:sub_slug"`
-	Type      int       `gorm:"column:sub_type"`
-	Status    int       `gorm:"column:sub_status"`
-	CreatedAt time.Time `gorm:"column:sub_created_at"`
-	UpdatedAt time.Time `gorm:"column:sub_updated_at"`
 }
 type Category struct {
 	ID          int       `gorm:"primary_key; column:id"`
@@ -66,4 +53,13 @@ type ProductLineRespond struct {
 	Name   string
 	Slug   string
 	Status int
+}
+
+type MenuResponse struct {
+	ID       int            `json:"id"`
+	ParentID int            `json:"parent_id"`
+	Name     string         `json:"name"`
+	Slug     string         `json:"slug"`
+	Type     int            `json:"type"`
+	SubMenus []MenuResponse `json:"sub_menu"`
 }
