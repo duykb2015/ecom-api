@@ -66,7 +66,7 @@ type ProductItemImages struct {
 	UpdatedAt      time.Time `gorm:"column:updated_at"`
 }
 
-type ProductRespond struct {
+type ProductResponse struct {
 	ID                   uint
 	Name                 string
 	Slug                 string
@@ -74,20 +74,20 @@ type ProductRespond struct {
 	SupportInfomation    string
 	Description          string
 	Status               uint
-	Attributes           []ProductAttributesRespond
-	Items                []ProductItemsRespond
+	Attributes           []ProductAttributesResponse
+	Items                []ProductItemsResponse
 }
-type ProductItemsRespond struct {
+type ProductItemsResponse struct {
 	ID         uint
 	Name       string
 	Slug       string
 	Status     uint
-	Attributes []ProductAttributesRespond
-	Colors     []ProductItemColorsRespond
-	Images     []ProductItemImagesRespond
+	Attributes []ProductAttributesResponse
+	Colors     []ProductItemColorsResponse
+	Images     []ProductItemImagesResponse
 }
 
-type ProductAttributesRespond struct {
+type ProductAttributesResponse struct {
 	ID     uint
 	Name   string
 	Key    string
@@ -95,7 +95,7 @@ type ProductAttributesRespond struct {
 	Status uint
 }
 
-type ProductItemColorsRespond struct {
+type ProductItemColorsResponse struct {
 	ID       uint
 	Name     string
 	Hexcode  string
@@ -105,7 +105,7 @@ type ProductItemColorsRespond struct {
 	Status   uint
 }
 
-type ProductItemImagesRespond struct {
+type ProductItemImagesResponse struct {
 	ID   uint
 	Name string
 }

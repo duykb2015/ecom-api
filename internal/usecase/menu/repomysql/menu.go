@@ -29,10 +29,18 @@ func (m *MenuRepo) GetChildens(menuIDs []int) ([]entity.Menu, error) {
 	return menus, err
 }
 
-func (m *MenuRepo) GetCategory() ([]entity.Category, error) {
-	return nil, nil
+func (m *MenuRepo) GetCategory(menuIDs []int) ([]entity.Category, error) {
+	categorys := []entity.Category{}
+	err := m.db.Table("product_category").
+		Where("status > 0 AND menu_id IN ?", menuIDs).
+		Find(&categorys).Error
+	return categorys, err
 }
 
-func (m *MenuRepo) GetProductLine() ([]entity.ProductLine, error) {
-	return nil, nil
+func (m *MenuRepo) GetProductLine(categoryIDs []int) ([]entity.ProductLine, error) {
+	productLine := []entity.ProductLine{}
+	err := m.db.Table("product").
+		Where("status > 0 AND category_id IN ?", categoryIDs).
+		Find(&productLine).Error
+	return productLine, err
 }
