@@ -67,45 +67,45 @@ type ProductItemImages struct {
 }
 
 type ProductResponse struct {
-	ID                   uint
-	Name                 string
-	Slug                 string
-	AdditionalInfomation string
-	SupportInfomation    string
-	Description          string
-	Status               uint
-	Attributes           []ProductAttributesResponse
-	Items                []ProductItemsResponse
+	ID                    uint                        `json:"id"`
+	Name                  string                      `json:"name"`
+	Slug                  string                      `json:"slug"`
+	AdditionalInformation string                      `json:"addtional_information"`
+	SupportInformation    string                      `json:"support_information"`
+	Description           string                      `json:"description"`
+	Status                uint                        `json:"status"`
+	Attributes            []ProductAttributesResponse `json:"attributes"`
+	Items                 []ProductItemsResponse      `json:"items"`
 }
 type ProductItemsResponse struct {
-	ID         uint
-	Name       string
-	Slug       string
-	Status     uint
-	Attributes []ProductAttributesResponse
-	Colors     []ProductItemColorsResponse
-	Images     []ProductItemImagesResponse
+	ID         uint                        `json:"id"`
+	Name       string                      `json:"name"`
+	Slug       string                      `json:"slug"`
+	Status     uint                        `json:"status"`
+	Attributes []ProductAttributesResponse `json:"attributes"`
+	Colors     []ProductItemColorsResponse `json:"colors"`
+	Images     []ProductItemImagesResponse `json:"images"`
 }
 
 type ProductAttributesResponse struct {
-	ID     uint
-	Name   string
-	Key    string
-	Value  string
-	Status uint
+	ID     uint   `json:"id"`
+	Name   string `json:"name"`
+	Key    string `json:"key"`
+	Value  string `json:"value"`
+	Status uint   `json:"status"`
 }
 
 type ProductItemColorsResponse struct {
-	ID       uint
-	Name     string
-	Hexcode  string
-	Price    float64
-	Discount float64
-	Quantity uint
-	Status   uint
+	ID       uint    `json:"id"`
+	Name     string  `json:"name"`
+	Hexcode  string  `json:"hexcode"`
+	Price    float64 `json:"price"`
+	Discount float64 `json:"discount"`
+	Quantity uint    `json:"quantity"`
+	Status   uint    `json:"status"`
 }
 
 type ProductItemImagesResponse struct {
-	ID   uint
-	Name string
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
 }
