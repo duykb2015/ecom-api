@@ -11,7 +11,9 @@ type Menu struct {
 	Status    int       `gorm:"column:status"`
 	CreatedAt time.Time `gorm:"column:created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at"`
+
 }
+
 type Category struct {
 	ID          int       `gorm:"primary_key; column:id"`
 	MenuID      int       `gorm:"column:menu_id"`
@@ -52,4 +54,5 @@ type ProductLineResponse struct {
 	Name   string `json:"name"`
 	Slug   string `json:"slug"`
 	Status int    `json:"status"`
+
 }

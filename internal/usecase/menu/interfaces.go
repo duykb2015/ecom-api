@@ -11,4 +11,7 @@ type (
 	Menu interface {
 		Get() ([]entity.MenuResponse, error)
 	}
+	Menu interface {
+		MenuRespond() ([]entity.MenuRespond, error)
+	}
 )

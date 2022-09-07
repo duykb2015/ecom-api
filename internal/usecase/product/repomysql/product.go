@@ -14,6 +14,7 @@ func New(db *gorm.DB) *ProductRepo {
 }
 
 func (p *ProductRepo) GetAll() ([]entity.Product, error) {
+
 	product := []entity.Product{}
 	err := p.Table("product").Where("status > ?", 0).Find(&product).Error
 	return product, err

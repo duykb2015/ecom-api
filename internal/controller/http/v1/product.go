@@ -25,6 +25,7 @@ func NewProductRoutes(handler *gin.RouterGroup, p usecase.Product) {
 func (r *ProductRoutes) GetAllProduct(c *gin.Context) {
 	product, err := r.p.Get()
 
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":  err.Error(),
@@ -42,6 +43,7 @@ func (r *ProductRoutes) GetAllProduct(c *gin.Context) {
 
 func (r *ProductRoutes) getByCategory(c *gin.Context) {
 	categoryID, err := strconv.Atoi(c.Param("id"))
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -49,6 +51,7 @@ func (r *ProductRoutes) getByCategory(c *gin.Context) {
 		return
 	}
 	product, err := r.p.Category(categoryID)
+
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -72,20 +75,34 @@ func (r *ProductRoutes) getItems(c *gin.Context) {
 		return
 	}
 	itemID, err := strconv.Atoi(c.Param("itemID"))
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error":  err.Error(),
+			"result": "",
+		})
+		return
+	}
+
+	product_item_id, err := strconv.Atoi(c.Param("product_item_id"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":  err.Error(),
+			"result": "",
 		})
 		return
 	}
 	product, err := r.p.Items(productID, itemID)
 
+
+	product, err := r.p.ItemInfo(product_id, product_item_id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"error":  "success",
 		"result": product,
