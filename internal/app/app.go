@@ -28,5 +28,5 @@ func Run(cfg *config.Config) {
 
 	handler := gin.Default()
 	v1.NewRouter(handler, productUC, menuUC)
-	handler.Run()
+	handler.Run(":1993")
 }

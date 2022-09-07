@@ -24,7 +24,7 @@ func (m *MenuRepo) GetParents() ([]entity.Menu, error) {
 func (m *MenuRepo) GetChildens(menuIDs []int) ([]entity.Menu, error) {
 	menus := []entity.Menu{}
 	err := m.db.Table("menu").
-		Where("parent_id <> 0 AND id IN ? AND status > 0", menuIDs).
+		Where("parent_id IN (?) AND status > 0", menuIDs).
 		Find(&menus).Error
 	return menus, err
 }

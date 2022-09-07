@@ -61,3 +61,5 @@ func (uc *MenuUsecase) Get() ([]entity.MenuResponse, error) {
 
 	return resp, nil
 }
+
+func (uc *MenuUsecase) GetCategory() ([]entity.CategoryResponse, error)

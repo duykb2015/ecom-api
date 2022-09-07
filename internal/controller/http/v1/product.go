@@ -16,7 +16,7 @@ func NewProductRoutes(handler *gin.RouterGroup, p usecase.Product) {
 	r := &ProductRoutes{p: p}
 	h := handler.Group("product")
 	{
-		h.GET("/", r.GetAllProduct)
+		h.GET("", r.GetAllProduct)
 		h.GET("/category/:id", r.getByCategory)
 		h.GET("/item/:productID/:itemID", r.getItems)
 	}
