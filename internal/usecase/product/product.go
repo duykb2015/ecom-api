@@ -72,11 +72,11 @@ func (uc *ProductUsecase) Items(ProductID int, ItemID int) (entity.ProductRespon
 		})
 	}
 
-	item, err := uc.repo.GetItems(ItemID)
+	temp, err := uc.repo.GetItemsByID(ItemID)
 	if err != nil {
 		return entity.ProductResponse{}, err
 	}
-
+	item := temp[0]
 	images, err := uc.repo.GetItemImages(int(item.ID))
 	if err != nil {
 		return entity.ProductResponse{}, err
@@ -146,5 +146,95 @@ func (uc *ProductUsecase) Items(ProductID int, ItemID int) (entity.ProductRespon
 		Items:                 itemResponse,
 	}
 
+	return resp, nil
+}
+
+func (uc *ProductUsecase) GetHotDeal() ([]entity.ProductBasicInfoResponse, error) {
+	resp := make([]entity.ProductBasicInfoResponse, 0)
+
+	items, err := uc.repo.GetItems()
+	if err != nil {
+		return resp, err
+	}
+
+	for _, item := range items {
+		colors, err := uc.repo.GetItemColors(int(item.ID))
+		if err != nil {
+			return resp, err
+		}
+		//just need one
+		color := colors[0]
+
+		images, err := uc.repo.GetItemImages(int(item.ID))
+		if err != nil {
+			return resp, err
+		}
+		image := images[0]
+
+		if color.Discount > 0 {
+			discountPrice := uint(color.Price - (color.Price * color.Discount / 100))
+			resp = append(resp, entity.ProductBasicInfoResponse{
+				ID:            item.ID,
+				Name:          item.Name,
+				Slug:          item.Slug,
+				Image:         image.Name,
+				Price:         uint(color.Price),
+				Discount:      uint(color.Discount),
+				DiscountPrice: discountPrice,
+			})
+		}
+	}
+	return resp, nil
+}
+
+func (uc *ProductUsecase) GetLine() ([]entity.ProductResponse, error) {
+	resp := make([]entity.ProductResponse, 0)
+
+	products, err := uc.repo.GetAll()
+	if err != nil {
+		return resp, err
+	}
+
+	for _, product := range products {
+		items, err := uc.repo.GetItemsByID(int(product.ID))
+		itemInfo := make([]entity.ProductBasicInfoResponse, 0)
+
+		for _, item := range items {
+			if err != nil {
+				return resp, err
+			}
+
+			colors, err := uc.repo.GetItemColors(int(item.ID))
+			if err != nil {
+				return resp, err
+			}
+			//just need one
+			color := colors[0]
+
+			images, err := uc.repo.GetItemImages(int(item.ID))
+			if err != nil {
+				return resp, err
+			}
+			image := images[0]
+
+			discountPrice := uint(color.Price - (color.Price * color.Discount / 100))
+
+			itemInfo = append(itemInfo, entity.ProductBasicInfoResponse{
+				ID:            item.ID,
+				Name:          item.Name,
+				Slug:          item.Slug,
+				Image:         image.Name,
+				Price:         uint(color.Price),
+				Discount:      uint(color.Discount),
+				DiscountPrice: discountPrice,
+			})
+		}
+		resp = append(resp, entity.ProductResponse{
+			ID:            product.ID,
+			Name:          product.Name,
+			Slug:          product.Slug,
+			BasicItemInfo: itemInfo,
+		})
+	}
 	return resp, nil
 }

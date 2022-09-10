@@ -76,6 +76,7 @@ type ProductResponse struct {
 	Status                uint                        `json:"status"`
 	Attributes            []ProductAttributesResponse `json:"attributes"`
 	Items                 []ProductItemsResponse      `json:"items"`
+	BasicItemInfo         []ProductBasicInfoResponse  `json:"items_info"`
 }
 type ProductItemsResponse struct {
 	ID         uint                        `json:"id"`
@@ -108,5 +109,14 @@ type ProductItemColorsResponse struct {
 type ProductItemImagesResponse struct {
 	ID   uint   `json:"id"`
 	Name string `json:"name"`
+}
 
+type ProductBasicInfoResponse struct {
+	ID            uint   `json:"id"`
+	Name          string `json:"name"`
+	Slug          string `json:"slug"`
+	Image         string `json:"image"`
+	Price         uint   `json:"price"`
+	Discount      uint   `json:"discount"`
+	DiscountPrice uint   `json:"discount_price"`
 }

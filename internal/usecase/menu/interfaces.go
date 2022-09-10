@@ -6,12 +6,11 @@ import "github.com/duykb2015/ecom-api/internal/entity"
 type (
 	MenuRepo interface {
 		GetParents() ([]entity.Menu, error)
-		GetChildens(menuIDs []int) ([]entity.Menu, error)
+		GetChildens() ([]entity.Menu, error)
+		GetCategory(menuID int) ([]entity.Category, error)
 	}
 	Menu interface {
 		Get() ([]entity.MenuResponse, error)
-	}
-	Menu interface {
-		MenuRespond() ([]entity.MenuRespond, error)
+		GetCategory(menuID int) ([]entity.CategoryResponse, error)
 	}
 )

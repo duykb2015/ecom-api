@@ -6,12 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Response struct {
-	Code    int         `json:"code"`
-	Message string      `json:"error,omitempty"`
-	Result  interface{} `json:"result,omitempty"`
-}
-
 func NewRouter(handler *gin.Engine, p product.Product, m menu.Menu) {
 
 	h := handler.Group("/v1")
@@ -19,6 +13,12 @@ func NewRouter(handler *gin.Engine, p product.Product, m menu.Menu) {
 		NewProductRoutes(h, p)
 		NewMenuRoutes(h, m)
 	}
+}
+
+type Response struct {
+	Code    int         `json:"code"`
+	Message string      `json:"error,omitempty"`
+	Result  interface{} `json:"result,omitempty"`
 }
 
 func NewResponse(code int, msg string, result interface{}) Response {

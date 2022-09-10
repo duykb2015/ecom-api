@@ -14,9 +14,9 @@ func New(db *gorm.DB) *ProductRepo {
 }
 
 func (p *ProductRepo) GetAll() ([]entity.Product, error) {
-
 	product := []entity.Product{}
-	err := p.Table("product").Where("status > ?", 0).Find(&product).Error
+	err := p.Table("product").
+		Where("status > ?", 0).Find(&product).Error
 	return product, err
 }
 
@@ -32,23 +32,16 @@ func (p *ProductRepo) Get(productID int) (entity.Product, error) {
 	return productItems, err
 }
 
-func (p *ProductRepo) GetItems(itemID int) (entity.ProductItems, error) {
-	productItems := entity.ProductItems{}
-	err := p.Table("product_items").Where("id = ?", itemID).Find(&productItems).Error
+func (p *ProductRepo) GetItems() ([]entity.ProductItems, error) {
+	productItems := []entity.ProductItems{}
+	err := p.Table("product_items").Find(&productItems).Error
 	return productItems, err
 }
 
-func (p *ProductRepo) _GetAttributes(productID int, null bool) ([]entity.ProductAttributes, error) {
-	attribute := []entity.ProductAttributes{}
-	isNull := ""
-	if null {
-		isNull = "IS NULL"
-	}
-	err := p.Table("product_attributes").
-		Joins("product_attribute_values").
-		Where("product_id = ? AND product_item_id ?", isNull, productID).
-		Find(&attribute).Error
-	return attribute, err
+func (p *ProductRepo) GetItemsByID(productID int) ([]entity.ProductItems, error) {
+	productItems := []entity.ProductItems{}
+	err := p.Table("product_items").Where("product_id = ?", productID).Find(&productItems).Error
+	return productItems, err
 }
 
 func (p *ProductRepo) GetAttributes(productID int) ([]entity.ProductAttributes, error) {

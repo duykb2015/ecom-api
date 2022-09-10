@@ -20,6 +20,10 @@ func NewMenuRoutes(handler *gin.RouterGroup, m usecase.Menu) {
 }
 
 func (r *MenuRoutes) GetAllMenu(c *gin.Context) {
-	menu, _ := r.m.Get()
+	menu, err := r.m.Get()
+	if err != nil {
+		c.JSON(http.StatusOK, NewResponse(http.StatusOK, "error", err))
+		return
+	}
 	c.JSON(http.StatusOK, NewResponse(http.StatusOK, "ok", menu))
 }
