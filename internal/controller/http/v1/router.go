@@ -14,17 +14,3 @@ func NewRouter(handler *gin.Engine, p product.Product, m menu.Menu) {
 		NewMenuRoutes(h, m)
 	}
 }
-
-type Response struct {
-	Code    int         `json:"code"`
-	Message string      `json:"error,omitempty"`
-	Result  interface{} `json:"result,omitempty"`
-}
-
-func NewResponse(code int, msg string, result interface{}) Response {
-	return Response{
-		Code:    code,
-		Message: msg,
-		Result:  result,
-	}
-}
