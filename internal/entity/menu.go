@@ -11,20 +11,8 @@ type Menu struct {
 	Status    int       `gorm:"column:status"`
 	CreatedAt time.Time `gorm:"column:created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at"`
-	SubMenu   []SubMenu
-	Category  []Category
 }
-type SubMenu struct {
-	ID        int       `gorm:"primary_key; column:sub_id"`
-	MenuID    int       `gorm:"column:id"`
-	ParentID  int       `gorm:"column:sub_parent_id"`
-	Name      string    `gorm:"column:sub_name"`
-	Slug      string    `gorm:"column:sub_slug"`
-	Type      int       `gorm:"column:sub_type"`
-	Status    int       `gorm:"column:sub_status"`
-	CreatedAt time.Time `gorm:"column:sub_created_at"`
-	UpdatedAt time.Time `gorm:"column:sub_updated_at"`
-}
+
 type Category struct {
 	ID          int       `gorm:"primary_key; column:id"`
 	MenuID      int       `gorm:"column:menu_id"`
@@ -43,27 +31,25 @@ type ProductLine struct {
 	Status     int    `gorm:"column:status"`
 }
 
-type MenuRespond struct {
-	ID       int
-	Name     string
-	Slug     string
-	SubMenu  []SubMenuRespond
-	Category []CategoryRespond
+type MenuResponse struct {
+	ID        int                `json:"id"`
+	ParentID  int                `json:"parent_id"`
+	Name      string             `json:"name"`
+	Slug      string             `json:"slug"`
+	Type      int                `json:"type"`
+	SubMenus  []MenuResponse     `json:"sub_menu"`
+	Categorys []CategoryResponse `json:"category"`
 }
-type SubMenuRespond struct {
-	ID   int
-	Name string
-	Slug string
+
+type CategoryResponse struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+	Slug string `json:"slug"`
 }
-type CategoryRespond struct {
-	ID          int
-	Name        string
-	Slug        string
-	ProductLine []ProductLineRespond
-}
-type ProductLineRespond struct {
-	ID     int
-	Name   string
-	Slug   string
-	Status int
+
+type ProductLineResponse struct {
+	ID     int    `json:"id"`
+	Name   string `json:"name"`
+	Slug   string `json:"slug"`
+	Status int    `json:"status"`
 }

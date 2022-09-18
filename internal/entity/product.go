@@ -66,46 +66,57 @@ type ProductItemImages struct {
 	UpdatedAt      time.Time `gorm:"column:updated_at"`
 }
 
-type ProductRespond struct {
-	ID                   uint
-	Name                 string
-	Slug                 string
-	AdditionalInfomation string
-	SupportInfomation    string
-	Description          string
-	Status               uint
-	Attributes           []ProductAttributesRespond
-	Items                []ProductItemsRespond
+type ProductResponse struct {
+	ID                    uint                        `json:"id"`
+	Name                  string                      `json:"name"`
+	Slug                  string                      `json:"slug"`
+	AdditionalInformation string                      `json:"addtional_information"`
+	SupportInformation    string                      `json:"support_information"`
+	Description           string                      `json:"description"`
+	Status                uint                        `json:"status"`
+	Attributes            []ProductAttributesResponse `json:"attributes"`
+	Items                 []ProductItemsResponse      `json:"items"`
+	BasicItemInfo         []ProductBasicInfoResponse  `json:"items_info"`
 }
-type ProductItemsRespond struct {
-	ID         uint
-	Name       string
-	Slug       string
-	Status     uint
-	Attributes []ProductAttributesRespond
-	Colors     []ProductItemColorsRespond
-	Images     []ProductItemImagesRespond
-}
-
-type ProductAttributesRespond struct {
-	ID     uint
-	Name   string
-	Key    string
-	Value  string
-	Status uint
+type ProductItemsResponse struct {
+	ID         uint                        `json:"id"`
+	Name       string                      `json:"name"`
+	Slug       string                      `json:"slug"`
+	Status     uint                        `json:"status"`
+	Attributes []ProductAttributesResponse `json:"attributes"`
+	Colors     []ProductItemColorsResponse `json:"colors"`
+	Images     []ProductItemImagesResponse `json:"images"`
 }
 
-type ProductItemColorsRespond struct {
-	ID       uint
-	Name     string
-	Hexcode  string
-	Price    float64
-	Discount float64
-	Quantity uint
-	Status   uint
+type ProductAttributesResponse struct {
+	ID     uint   `json:"id"`
+	Name   string `json:"name"`
+	Key    string `json:"key"`
+	Value  string `json:"value"`
+	Status uint   `json:"status"`
 }
 
-type ProductItemImagesRespond struct {
-	ID   uint
-	Name string
+type ProductItemColorsResponse struct {
+	ID       uint    `json:"id"`
+	Name     string  `json:"name"`
+	Hexcode  string  `json:"hexcode"`
+	Price    float64 `json:"price"`
+	Discount float64 `json:"discount"`
+	Quantity uint    `json:"quantity"`
+	Status   uint    `json:"status"`
+}
+
+type ProductItemImagesResponse struct {
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
+}
+
+type ProductBasicInfoResponse struct {
+	ID            uint   `json:"id"`
+	Name          string `json:"name"`
+	Slug          string `json:"slug"`
+	Image         string `json:"image"`
+	Price         uint   `json:"price"`
+	Discount      uint   `json:"discount"`
+	DiscountPrice uint   `json:"discount_price"`
 }

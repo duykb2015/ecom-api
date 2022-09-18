@@ -15,7 +15,7 @@ import (
 
 func Run(cfg *config.Config) {
 
-	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.ReleaseMode)
 
 	db, err := mysql.New(&cfg.MySQL)
 	if err != nil {
@@ -28,5 +28,7 @@ func Run(cfg *config.Config) {
 
 	handler := gin.Default()
 	v1.NewRouter(handler, productUC, menuUC)
-	handler.Run(":8080")
+
+	handler.Run(":1993")
+
 }

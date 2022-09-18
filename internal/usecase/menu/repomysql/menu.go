@@ -13,18 +13,34 @@ func New(db *gorm.DB) *MenuRepo {
 	return &MenuRepo{db}
 }
 
-func (m *MenuRepo) GetAllMenu() ([]entity.Menu, error) {
-	menu := []entity.Menu{}
-	m.db.Table("menu").Where("parent_id = ? AND status > ?", 0, 0).Find(&menu)
-	for i, val := range menu {
-		m.db.Table("menu submenu").
-			Select("submenu.id as sub_id, submenu.parent_id as sub_parent_id, submenu.name as sub_name, submenu.slug as sub_slug, submenu.type as sub_type, submenu.status as sub_status, submenu.created_at as sub_created_at, submenu.updated_at as sub_updated_at").
-			Where("submenu.parent_id = ? AND submenu.status > ?", val.ID, 0).
-			Find(&menu[i].SubMenu)
-		m.db.Table("product_category").Where("menu_id", val.ID).Find(&menu[i].Category)
-		for j, category := range menu[i].Category {
-			m.db.Table("product").Select("id, name, slug, status").Where("category_id", category.ID).Find(&menu[i].Category[j].ProductLine)
-		}
-	}
-	return menu, nil
+func (m *MenuRepo) GetParents() ([]entity.Menu, error) {
+	menus := []entity.Menu{}
+	err := m.db.Table("menu").
+		Where("parent_id = 0 AND status > 0").
+		Find(&menus).Error
+	return menus, err
+}
+
+func (m *MenuRepo) GetChildens() ([]entity.Menu, error) {
+	menus := []entity.Menu{}
+	err := m.db.Table("menu").
+		Where("parent_id <> 0 AND status > 0").
+		Find(&menus).Error
+	return menus, err
+}
+
+func (m *MenuRepo) GetCategory(menuID int) ([]entity.Category, error) {
+	categorys := []entity.Category{}
+	err := m.db.Table("product_category").
+		Where("status > 0 AND menu_id = ?", menuID).
+		Find(&categorys).Error
+	return categorys, err
+}
+
+func (m *MenuRepo) GetProductLine(categoryID int) ([]entity.ProductLine, error) {
+	productLine := []entity.ProductLine{}
+	err := m.db.Table("product").
+		Where("status > 0 AND category_id = ?", categoryID).
+		Find(&productLine).Error
+	return productLine, err
 }

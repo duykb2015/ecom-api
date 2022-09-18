@@ -13,47 +13,69 @@ func New(db *gorm.DB) *ProductRepo {
 	return &ProductRepo{db}
 }
 
-func (p *ProductRepo) GetAllProduct() ([]entity.Product, error) {
+func (p *ProductRepo) GetAll() ([]entity.Product, error) {
 	product := []entity.Product{}
-	p.Table("product").Where("status > ?", 0).Find(&product)
-	return product, nil
+	err := p.Table("product").
+		Where("status > ?", 0).Find(&product).Error
+	return product, err
 }
 
-func (p *ProductRepo) GetAllProductByCategory(id int) ([]entity.Product, error) {
+func (p *ProductRepo) GetByCategory(categoryIDs int) ([]entity.Product, error) {
 	product := []entity.Product{}
-	p.Table("product").Select("id, category_id, name, slug, status").Where("category_id = ? AND status > ?", id, 0).Find(&product)
-	return product, nil
+	err := p.Table("product").Where("category_id = ? AND status > 0", categoryIDs).Find(&product).Error
+	return product, err
 }
 
-func (p *ProductRepo) GetAllProductItemsByProduct(id int) ([]entity.Product, error) {
-	product := []entity.Product{}
-	p.Table("product").Select("id, category_id, name, slug, status").Where("id = ? AND status > ?", id, 0).Find(&product)
-	for i, val := range product {
-		p.Table("product_items").Select("id, product_id, name, slug, status").Where("product_id", val.ID).Find(&product[i].ProductItems)
-	}
-	return product, nil
+func (p *ProductRepo) Get(productID int) (entity.Product, error) {
+	productItems := entity.Product{}
+	err := p.Table("product").Where("id = ?", productID).Find(&productItems).Error
+	return productItems, err
 }
 
-func (p *ProductRepo) GetProductItemInfo(product_id int, product_item_id int) (entity.Product, error) {
-	product := entity.Product{}
-	field := "product_attributes.id, product_id, product_item_id, pav.name, pav.key, pav.value"
-	clause := "JOIN product_attribute_values pav ON pav.id = product_attributes.product_attribute_value_id"
+func (p *ProductRepo) GetItems() ([]entity.ProductItems, error) {
+	productItems := []entity.ProductItems{}
+	err := p.Table("product_items").Find(&productItems).Error
+	return productItems, err
+}
 
-	p.Table("product").Where("id", product_id).Find(&product)
-	p.Table("product_attributes").
-		Select(field).
-		Joins(clause).
-		Where("product_id", product_id).
-		Find(&product.ProductAttributes)
+func (p *ProductRepo) GetItemsByID(productID int) ([]entity.ProductItems, error) {
+	productItems := []entity.ProductItems{}
+	err := p.Table("product_items").Where("product_id = ?", productID).Find(&productItems).Error
+	return productItems, err
+}
 
-	p.Table("product_items").Where("product_id", product_item_id).Find(&product.ProductItems)
-	p.Table("product_attributes").
-		Select(field).
-		Joins(clause).
-		Where("product_item_id", product_item_id).
-		Find(&product.ProductItems[0].ProductAttributes)
-	p.Table("product_item_colors").Where("product_item_id", product_item_id).Find(&product.ProductItems[0].ProductItemColors)
-	p.Table("product_item_images").Where("product_item_id", product_item_id).Find(&product.ProductItems[0].ProductItemImages)
+func (p *ProductRepo) GetAttributes(productID int) ([]entity.ProductAttributes, error) {
+	attribute := []entity.ProductAttributes{}
+	err := p.Table("product_attributes pa").
+		Select("pa.id, pa.product_id, pa.product_item_id, pav.name, pav.key, pav.value, pa.status, pa.created_at, pa.updated_at").
+		Joins("JOIN product_attribute_values pav ON pa.product_attribute_value_id = pav.id").
+		Where("product_id = ? AND product_item_id IS NULL", productID).
+		Find(&attribute).Error
+	return attribute, err
+}
 
-	return product, nil
+func (p *ProductRepo) GetItemAttributes(productItemID int) ([]entity.ProductAttributes, error) {
+	attribute := []entity.ProductAttributes{}
+	err := p.Table("product_attributes pa").
+		Select("pa.id, pa.product_id, pa.product_item_id, pav.name, pav.key, pav.value, pa.status, pa.created_at, pa.updated_at").
+		Joins("JOIN product_attribute_values pav ON pa.product_attribute_value_id = pav.id").
+		Where("product_item_id = ?", productItemID).
+		Find(&attribute).Error
+	return attribute, err
+}
+
+func (p *ProductRepo) GetItemImages(itemId int) ([]entity.ProductItemImages, error) {
+	attribute := []entity.ProductItemImages{}
+	err := p.Table("product_item_images").
+		Where("product_item_id = ?", itemId).
+		Find(&attribute).Error
+	return attribute, err
+}
+
+func (p *ProductRepo) GetItemColors(itemId int) ([]entity.ProductItemColors, error) {
+	attribute := []entity.ProductItemColors{}
+	err := p.Table("product_item_colors").
+		Where("product_item_id = ?", itemId).
+		Find(&attribute).Error
+	return attribute, err
 }

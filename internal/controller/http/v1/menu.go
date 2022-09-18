@@ -15,23 +15,15 @@ func NewMenuRoutes(handler *gin.RouterGroup, m usecase.Menu) {
 	r := &MenuRoutes{m}
 	h := handler.Group("/menu")
 	{
-		h.GET("/", r.GetAllMenu)
+		h.GET("", r.GetAllMenu)
 	}
 }
 
 func (r *MenuRoutes) GetAllMenu(c *gin.Context) {
-
-	menu, err := r.m.MenuRespond()
-
+	menu, err := r.m.Get()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":  err.Error(),
-			"result": "",
-		})
+		c.JSON(http.StatusOK, NewResponse(http.StatusOK, "error", err))
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"error":  "success",
-		"result": menu,
-	})
+	c.JSON(http.StatusOK, NewResponse(http.StatusOK, "ok", menu))
 }

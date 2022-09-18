@@ -5,16 +5,22 @@ import "github.com/duykb2015/ecom-api/internal/entity"
 type (
 	// ProductUsecase interface
 	ProductRepo interface {
-		GetAllProduct() ([]entity.Product, error)
-		GetAllProductByCategory(id int) ([]entity.Product, error)
-		GetAllProductItemsByProduct(id int) ([]entity.Product, error)
-		GetProductItemInfo(product_id int, product_item_id int) (entity.Product, error)
+		Get(productID int) (entity.Product, error)
+		GetAll() ([]entity.Product, error)
+		GetByCategory(categoryID int) ([]entity.Product, error)
+		GetItems() ([]entity.ProductItems, error)
+		GetItemsByID(productID int) ([]entity.ProductItems, error)
+		GetAttributes(productID int) ([]entity.ProductAttributes, error)
+		GetItemAttributes(productItemID int) ([]entity.ProductAttributes, error)
+		GetItemImages(itemId int) ([]entity.ProductItemImages, error)
+		GetItemColors(itemId int) ([]entity.ProductItemColors, error)
 	}
 
 	Product interface {
-		GetAll() ([]entity.ProductLineRespond, error)
-		GetByCategory(id int) ([]entity.ProductLineRespond, error)
-		Items(id int) ([]entity.ProductRespond, error)
-		ItemInfo(product_id int, product_item_id int) (entity.ProductRespond, error)
+		Get() ([]entity.ProductResponse, error)
+		Category(categoryID int) ([]entity.ProductResponse, error)
+		Items(ProductID int, ItemID int) (entity.ProductResponse, error)
+		GetHotDeal() ([]entity.ProductBasicInfoResponse, error)
+		GetLine() ([]entity.ProductResponse, error)
 	}
 )
