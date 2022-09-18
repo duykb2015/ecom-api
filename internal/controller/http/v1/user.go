@@ -15,17 +15,19 @@ type UserRoutes struct {
 
 func NewUserRoutes(handler *gin.RouterGroup, u usecase.User, mw *middleware.MiddleWareManager) {
 	r := &UserRoutes{u}
-	h := handler.Group("/auth/login")
+	h := handler.Group("/user")
 	{
-		h.GET("", r.Login)
+		h.GET("/auth/login", r.Login)
+		h.Use(mw.AuthJWTMiddleWare())
 	}
 }
 
 func (r *UserRoutes) Login(c *gin.Context) {
-	menu, err := r.u.AuthLogin()
+	user, err := r.u.AuthLogin()
+
 	if err != nil {
-		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "error", err))
+		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, err.Error(), nil))
 		return
 	}
-	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", menu))
+	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", user))
 }
