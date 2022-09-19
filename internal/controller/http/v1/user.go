@@ -18,12 +18,23 @@ func NewUserRoutes(handler *gin.RouterGroup, u usecase.User, mw *middleware.Midd
 	h := handler.Group("/user")
 	{
 		h.GET("/auth/login", r.Login)
+		h.GET("/auth/login", r.Register)
 		h.Use(mw.AuthJWTMiddleWare())
 	}
 }
 
 func (r *UserRoutes) Login(c *gin.Context) {
 	user, err := r.u.AuthLogin()
+
+	if err != nil {
+		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, err.Error(), nil))
+		return
+	}
+	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", user))
+}
+
+func (r *UserRoutes) Register(c *gin.Context) {
+	user, err := r.u.AuthRegister()
 
 	if err != nil {
 		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, err.Error(), nil))

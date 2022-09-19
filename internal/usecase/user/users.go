@@ -1,10 +1,6 @@
 package usecase
 
 import (
-	"os"
-	"time"
-
-	"github.com/dgrijalva/jwt-go"
 	"github.com/duykb2015/ecom-api/internal/entity"
 )
 
@@ -12,31 +8,32 @@ type UserUsecase struct {
 	r UserRepo
 }
 
-// const secretKey = os.Getenv("SECRET_KEY")
-
 func New(r UserRepo) *UserUsecase {
 	return &UserUsecase{r}
 }
 
-func (r *UserUsecase) AuthLogin() (entity.UserResponse, error) {
+func (r *UserUsecase) AuthLogin() (entity.AuthResponse, error) {
 	tokenString, err := generateToken("1")
 	if err != nil {
-		return entity.UserResponse{}, err
+		return entity.AuthResponse{}, err
 	}
-	result := entity.UserResponse{
-		ID:    1,
+	result := entity.AuthResponse{
 		Token: tokenString,
 	}
 	return result, nil
 }
 
-func generateToken(userID string) (string, error) {
-	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		ExpiresAt: time.Now().Add(time.Minute * 15).Unix(),
-	})
-	token, err := claims.SignedString([]byte(os.Getenv("SECRET_KEY")))
+func (r *UserUsecase) AuthRegister() (entity.AuthResponse, error) {
+	tokenString, err := GenerateToken("1")
 	if err != nil {
-		return "", err
+		return entity.AuthResponse{}, err
 	}
-	return token, nil
+	result := entity.AuthResponse{
+		Token: tokenString,
+	}
+	return result, nil
+}
+
+func (r *UserUsecase) RefreshToken() (interface{}, error) {
+	return nil, nil
 }

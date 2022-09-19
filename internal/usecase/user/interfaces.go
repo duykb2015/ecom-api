@@ -6,5 +6,6 @@ type UserRepo interface {
 }
 
 type User interface {
-	AuthLogin() (entity.UserResponse, error)
+	AuthLogin() (entity.AuthResponse, error)
+	AuthRegister() (entity.AuthResponse, error)
 }

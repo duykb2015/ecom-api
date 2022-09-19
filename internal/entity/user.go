@@ -16,8 +16,7 @@ type User struct {
 	LastLoginAt time.Time `gorm:"column:last_login_at"`
 }
 
-type UserResponse struct {
-	ID    uint   `gorm:"primary_key"`
+type AuthResponse struct {
 	Token string `json:"token"`
 }
 type UserInfoResponse struct {

@@ -42,9 +42,8 @@ func (mw *MiddleWareManager) validateJWT(tokenString string, ctx *gin.Context) e
 	if !token.Valid {
 		return httpclient.InvalidJWTToken
 	}
-
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		userID, ok := claims["sub"].(string)
+		userID, ok := claims["user_id"].(string)
 		if !ok {
 			return httpclient.InvalidJWTClaims
 		}
