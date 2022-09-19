@@ -17,15 +17,17 @@ type User struct {
 }
 
 type AuthResponse struct {
-	Token string `json:"token"`
+	Code    int    `json:"code"`
+	Message string `json:"msg,omitempty"`
+	Token   string `json:"token,omitempty"`
 }
 type UserInfoResponse struct {
-	ID       uint   `gorm:"primary_key"`
-	Name     string `gorm:"username"`
-	Email    string `gorm:"email"`
-	Password string `gorm:"password"`
-	Address  string `gorm:"address"`
-	Phone    int    `gorm:"phone"`
+	ID       uint   `json:"primary_key"`
+	Name     string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Address  string `json:"address"`
+	Phone    int    `json:"phone"`
 	Token    string `json:"token"`
-	Status   uint   `gorm:"column:status"`
+	Status   uint   `json:"column:status"`
 }

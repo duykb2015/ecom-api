@@ -9,8 +9,7 @@ import (
 
 var secretKey = os.Getenv("SECRET_KEY")
 
-func GenerateToken(userID string) (string, error) {
-	var secretKey = os.Getenv("SECRET_KEY")
+func GenerateToken(userID uint) (string, error) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"authorized": true,
 		"user_id":    userID,
