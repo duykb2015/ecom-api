@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/duykb2015/ecom-api/internal/controller/http/middleware"
+	"github.com/duykb2015/ecom-api/internal/entity"
 	usecase "github.com/duykb2015/ecom-api/internal/usecase/user"
 	"github.com/duykb2015/ecom-api/pkg/httpclient"
 	"github.com/gin-gonic/gin"
@@ -23,13 +24,8 @@ func NewUserRoutes(handler *gin.RouterGroup, u usecase.User, mw *middleware.Midd
 	}
 }
 
-type loginRequest struct {
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
-
 func (r *UserRoutes) Login(c *gin.Context) {
-	request := loginRequest{}
+	request := entity.AuthRequest{}
 	if err := c.ShouldBind(&request); err != nil {
 		c.JSON(http.StatusBadRequest, httpclient.NewResponse(http.StatusBadRequest, err.Error(), nil))
 		return
@@ -44,7 +40,12 @@ func (r *UserRoutes) Login(c *gin.Context) {
 }
 
 func (r *UserRoutes) Register(c *gin.Context) {
-	user, err := r.u.AuthRegister()
+	request := entity.AuthRequest{}
+	if err := c.ShouldBind(&request); err != nil {
+		c.JSON(http.StatusBadRequest, httpclient.NewResponse(http.StatusBadRequest, err.Error(), nil))
+		return
+	}
+	user, err := r.u.AuthRegister(request)
 
 	if err != nil {
 		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, err.Error(), nil))

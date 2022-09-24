@@ -18,3 +18,13 @@ func (u *UserRepo) GetUser(email string) (entity.User, error) {
 	err := u.Table("user").Where("email = ?", email).Find(&user).Error
 	return user, err
 }
+
+func (u *UserRepo) SaveToken(userID uint, tokenString string) error {
+	err := u.Table("user").Where("id = ?", userID).Update("token", tokenString).Error
+	return err
+}
+
+func (u *UserRepo) CreateUser(insertData map[string]interface{}) error {
+	err := u.Table("user").Create(insertData).Error
+	return err
+}

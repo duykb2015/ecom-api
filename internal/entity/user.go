@@ -4,7 +4,7 @@ import "time"
 
 type User struct {
 	ID          uint      `gorm:"primary_key"`
-	Name        string    `gorm:"username"`
+	UserName    string    `gorm:"username"`
 	Email       string    `gorm:"email"`
 	Password    string    `gorm:"password"`
 	Address     string    `gorm:"address"`
@@ -30,4 +30,12 @@ type UserInfoResponse struct {
 	Phone    int    `json:"phone"`
 	Token    string `json:"token"`
 	Status   uint   `json:"column:status"`
+}
+
+type AuthRequest struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	UserName string `json:"username"`
+	Address  string `json:"address"`
+	Phone    string `json:"phone"`
 }

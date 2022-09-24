@@ -31,13 +31,25 @@ func (u *UserUsecase) AuthLogin(email string, password string) (entity.AuthRespo
 		}, nil
 	}
 
+	//Generate token
 	tokenString, err := jwt.GenerateToken(user.ID)
 	if err != nil {
 		return entity.AuthResponse{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
 		}, err
+
 	}
+
+	//Save token
+	err = u.r.SaveToken(user.ID, tokenString)
+	if err != nil {
+		return entity.AuthResponse{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}, err
+	}
+
 	return entity.AuthResponse{
 		Code:    http.StatusOK,
 		Message: "Ok!",
@@ -45,15 +57,43 @@ func (u *UserUsecase) AuthLogin(email string, password string) (entity.AuthRespo
 	}, nil
 }
 
-func (r *UserUsecase) AuthRegister() (entity.AuthResponse, error) {
-	tokenString, err := jwt.GenerateToken(2)
+func (u *UserUsecase) AuthRegister(request entity.AuthRequest) (entity.AuthResponse, error) {
+	user, err := u.r.GetUser(request.Email)
 	if err != nil {
-		return entity.AuthResponse{}, err
+		return entity.AuthResponse{
+			Code:    http.StatusUnauthorized,
+			Message: err.Error(),
+		}, err
 	}
-	result := entity.AuthResponse{
-		Token: tokenString,
+	//Check user name and password
+	if user.Email != "" {
+		return entity.AuthResponse{
+			Code:    http.StatusUnauthorized,
+			Message: "Email already exist!",
+		}, nil
 	}
-	return result, nil
+
+	insertData := map[string]interface{}{
+		"email":    request.Email,
+		"password": request.Password,
+		"username": request.UserName,
+		"address":  request.Address,
+		"phone":    request.Phone,
+	}
+
+	err = u.r.CreateUser(insertData)
+
+	if err != nil {
+		return entity.AuthResponse{
+			Code:    http.StatusInternalServerError,
+			Message: "An error occurred, please try again later!",
+		}, nil
+	}
+
+	return entity.AuthResponse{
+		Code:    http.StatusOK,
+		Message: "Ok!",
+	}, nil
 }
 
 func (r *UserUsecase) RefreshToken() (interface{}, error) {
