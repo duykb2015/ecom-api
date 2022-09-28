@@ -2,6 +2,8 @@ package httpclient
 
 import (
 	"errors"
+
+	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -36,4 +38,12 @@ func NewResponse(code int, msg string, result interface{}) Response {
 		Message: msg,
 		Result:  result,
 	}
+}
+
+func NewResponseWithGin(c *gin.Context, code int, msg string, result interface{}) {
+	c.JSON(code, Response{
+		Code:    code,
+		Message: msg,
+		Result:  result,
+	})
 }
