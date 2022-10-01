@@ -21,6 +21,8 @@ func NewUserRoutes(handler *gin.RouterGroup, u usecase.User, mw *middleware.Midd
 		h.POST("auth/login", r.Login)
 		h.POST("auth/register", r.Register)
 		h.Use(mw.AuthJWTMiddleWare())
+		h.GET("getinfo", r.GetInfo)
+		h.PUT("update", r.UpdateInfo)
 	}
 }
 
@@ -52,4 +54,33 @@ func (r *UserRoutes) Register(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", user))
+}
+
+func (r *UserRoutes) GetInfo(c *gin.Context) {
+	tokenString := c.Request.Header.Get("Authorization")
+	if tokenString == "" {
+		c.JSON(http.StatusBadRequest, httpclient.NewResponse(http.StatusBadRequest, "No token header found", nil))
+		return
+	}
+	user, err := r.u.GetInfo(tokenString)
+
+	if err != nil {
+		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusBadRequest, err.Error(), nil))
+		return
+	}
+	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", user))
+}
+
+func (r *UserRoutes) UpdateInfo(c *gin.Context) {
+	request := entity.AuthRequest{}
+	if err := c.ShouldBind(&request); err != nil {
+		c.JSON(http.StatusBadRequest, httpclient.NewResponse(http.StatusBadRequest, err.Error(), nil))
+		return
+	}
+	err := r.u.UpdateInfo(request)
+	if err != nil {
+		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusBadRequest, err.Error(), nil))
+		return
+	}
+	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", nil))
 }

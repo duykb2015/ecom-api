@@ -1,7 +1,9 @@
 package usecase
 
 import (
+	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/duykb2015/ecom-api/internal/entity"
 	"github.com/duykb2015/ecom-api/pkg/jwt"
@@ -16,7 +18,7 @@ func New(r UserRepo) *UserUsecase {
 }
 
 func (u *UserUsecase) AuthLogin(email string, password string) (entity.AuthResponse, error) {
-	user, err := u.r.GetUser(email)
+	user, err := u.r.GetByEmail(email)
 	if err != nil {
 		return entity.AuthResponse{
 			Code:    http.StatusUnauthorized,
@@ -32,6 +34,7 @@ func (u *UserUsecase) AuthLogin(email string, password string) (entity.AuthRespo
 	}
 
 	//Generate token
+
 	tokenString, err := jwt.GenerateToken(user.ID)
 	if err != nil {
 		return entity.AuthResponse{
@@ -58,7 +61,7 @@ func (u *UserUsecase) AuthLogin(email string, password string) (entity.AuthRespo
 }
 
 func (u *UserUsecase) AuthRegister(request entity.AuthRequest) (entity.AuthResponse, error) {
-	user, err := u.r.GetUser(request.Email)
+	user, err := u.r.GetByEmail(request.Email)
 	if err != nil {
 		return entity.AuthResponse{
 			Code:    http.StatusUnauthorized,
@@ -76,12 +79,12 @@ func (u *UserUsecase) AuthRegister(request entity.AuthRequest) (entity.AuthRespo
 	insertData := map[string]interface{}{
 		"email":    request.Email,
 		"password": request.Password,
-		"username": request.UserName,
+		"name":     request.Name,
 		"address":  request.Address,
 		"phone":    request.Phone,
 	}
 
-	err = u.r.CreateUser(insertData)
+	err = u.r.Create(insertData)
 
 	if err != nil {
 		return entity.AuthResponse{
@@ -94,6 +97,53 @@ func (u *UserUsecase) AuthRegister(request entity.AuthRequest) (entity.AuthRespo
 		Code:    http.StatusOK,
 		Message: "Ok!",
 	}, nil
+}
+
+func (u *UserUsecase) GetInfo(tokenString string) (entity.UserInfoResponse, error) {
+	user, err := u.r.GetInfo(tokenString)
+	if err != nil {
+		return entity.UserInfoResponse{}, err
+	}
+
+	resp := entity.UserInfoResponse{
+		ID:       user.ID,
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: user.Password,
+		Address:  user.Address,
+		Phone:    user.Phone,
+		Status:   user.Status,
+	}
+
+	return resp, nil
+}
+
+func (u *UserUsecase) UpdateInfo(request entity.AuthRequest) error {
+	userID, err := strconv.Atoi(request.ID)
+	if err != nil {
+		return err
+	}
+	user, err := u.r.GetByID(userID)
+	if err != nil {
+		return err
+	}
+
+	updateData := map[string]interface{}{
+		"name":    request.Name,
+		"address": request.Address,
+		"phone":   request.Phone,
+	}
+
+	if request.OldPassword != "" {
+		if user.Password != request.OldPassword {
+			return errors.New("Old password dose not match")
+		}
+
+		updateData["password"] = request.NewPassword
+	}
+
+	err = u.r.Update(userID, updateData)
+	return err
 }
 
 func (r *UserUsecase) RefreshToken() (interface{}, error) {

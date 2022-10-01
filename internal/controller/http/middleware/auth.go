@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"fmt"
+	_ "log"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
@@ -43,10 +44,7 @@ func (mw *MiddleWareManager) validateJWT(tokenString string, ctx *gin.Context) e
 		return httpclient.InvalidJWTToken
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		userID, ok := claims["user_id"].(string)
-		if !ok {
-			return httpclient.InvalidJWTClaims
-		}
+		userID := claims["user_id"]
 		ctx.Set("user_id", userID)
 	}
 
