@@ -1,30 +1,19 @@
 package v1
 
 import (
+	"github.com/duykb2015/ecom-api/internal/controller/http/middleware"
 	menu "github.com/duykb2015/ecom-api/internal/usecase/menu"
 	product "github.com/duykb2015/ecom-api/internal/usecase/product"
+	user "github.com/duykb2015/ecom-api/internal/usecase/user"
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter(handler *gin.Engine, p product.Product, m menu.Menu) {
+func NewRouter(handler *gin.Engine, p product.Product, m menu.Menu, mw *middleware.MiddleWareManager, u user.User) {
 
 	h := handler.Group("/v1")
 	{
 		NewProductRoutes(h, p)
 		NewMenuRoutes(h, m)
-	}
-}
-
-type Response struct {
-	Code    int         `json:"code"`
-	Message string      `json:"error,omitempty"`
-	Result  interface{} `json:"result,omitempty"`
-}
-
-func NewResponse(code int, msg string, result interface{}) Response {
-	return Response{
-		Code:    code,
-		Message: msg,
-		Result:  result,
+		NewUserRoutes(h, u, mw)
 	}
 }

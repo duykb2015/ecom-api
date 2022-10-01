@@ -5,6 +5,7 @@ import "github.com/caarlos0/env/v6"
 type (
 	Config struct {
 		MySQL
+		App
 	}
 
 	MySQL struct {
@@ -14,6 +15,16 @@ type (
 		ConnMaxLifeTime int    `env:"MYSQL_CONN_MAX_LIFE_TIME" envDefault:"149"`
 		Timeout         int    `env:"MYSQL_TIMEOUT" envDefault:"100"`
 		Debug           bool   `env:"MYSQL_DEBUG" envDefault:"true"`
+	}
+
+	RedisUC struct {
+		Addrs    string `env:"REDIS_UC_ADDRS,notEmpty"`
+		PoolSize int    `env:"REDIS_UC_POOL_SIZE" envDefault:"10"`
+	}
+
+	App struct {
+		JWTSecretKey string `env:"SECRET_KEY"`
+		APIKey       string
 	}
 )
 

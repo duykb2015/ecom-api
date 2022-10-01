@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	usecase "github.com/duykb2015/ecom-api/internal/usecase/menu"
+	"github.com/duykb2015/ecom-api/pkg/httpclient"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,8 +23,8 @@ func NewMenuRoutes(handler *gin.RouterGroup, m usecase.Menu) {
 func (r *MenuRoutes) GetAllMenu(c *gin.Context) {
 	menu, err := r.m.Get()
 	if err != nil {
-		c.JSON(http.StatusOK, NewResponse(http.StatusOK, "error", err))
+		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "error", err))
 		return
 	}
-	c.JSON(http.StatusOK, NewResponse(http.StatusOK, "ok", menu))
+	httpclient.NewResponseWithGin(c, http.StatusOK, "ok", menu)
 }
