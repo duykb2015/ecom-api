@@ -11,12 +11,13 @@ const (
 )
 
 const (
-	ErrBadRequest     = "Bad request"
-	ErrNoSuchUser     = "user_id not found"
-	ErrNotFound       = "Not Found"
-	ErrUnauthorized   = "Unauthorized"
-	ErrForbidden      = "Forbidden"
-	ErrBadQueryParams = "Invalid query params"
+	ErrBadRequest       = "Bad request"
+	ErrNoSuchUser       = "user_id not found"
+	ErrNotFound         = "Not Found"
+	ErrUnauthorized     = "Unauthorized"
+	ErrForbidden        = "Forbidden"
+	ErrBadQueryParams   = "Invalid query params"
+	ErrPasswordNotMatch = "Password does not match"
 )
 
 var (

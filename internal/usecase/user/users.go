@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/duykb2015/ecom-api/internal/entity"
+	"github.com/duykb2015/ecom-api/pkg/httpclient"
 	"github.com/duykb2015/ecom-api/pkg/jwt"
 )
 
@@ -136,7 +137,7 @@ func (u *UserUsecase) UpdateInfo(request entity.AuthRequest) error {
 
 	if request.OldPassword != "" {
 		if user.Password != request.OldPassword {
-			return errors.New("Old password dose not match")
+			return errors.New(httpclient.ErrPasswordNotMatch)
 		}
 
 		updateData["password"] = request.NewPassword
