@@ -14,7 +14,7 @@ func (mw *MiddleWareManager) AuthJWTMiddleWare() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		tokenString := ctx.Request.Header.Get("Authorization")
 		if err := mw.validateJWT(tokenString, ctx); err != nil {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, httpclient.NewResponse(http.StatusUnauthorized, err.Error(), nil))
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, err.Error())
 		}
 		ctx.Next()
 	}

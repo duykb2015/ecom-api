@@ -18,69 +18,83 @@ func NewUserRoutes(handler *gin.RouterGroup, u usecase.User, mw *middleware.Midd
 	r := &UserRoutes{u}
 	h := handler.Group("user")
 	{
-		h.POST("auth/login", r.Login)
-		h.POST("auth/register", r.Register)
+		h.POST("login", r.Login)
+		h.POST("register", r.Register)
 		h.Use(mw.AuthJWTMiddleWare())
+
 		h.GET("getinfo", r.GetInfo)
+		h.GET("/cart", r.GetCart)
 		h.PUT("update", r.UpdateInfo)
+
 	}
 }
 
 func (r *UserRoutes) Login(c *gin.Context) {
 	request := entity.AuthRequest{}
 	if err := c.ShouldBind(&request); err != nil {
-		c.JSON(http.StatusBadRequest, httpclient.NewResponse(http.StatusBadRequest, err.Error(), nil))
+		httpclient.NewResponse(c, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	user, err := r.u.AuthLogin(request.Email, request.Password)
 
+	user, err := r.u.AuthLogin(request.Email, request.Password)
 	if err != nil {
-		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, err.Error(), nil))
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
 		return
 	}
-	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", user))
+	httpclient.NewResponse(c, http.StatusOK, "ok", user)
 }
 
 func (r *UserRoutes) Register(c *gin.Context) {
 	request := entity.AuthRequest{}
 	if err := c.ShouldBind(&request); err != nil {
-		c.JSON(http.StatusBadRequest, httpclient.NewResponse(http.StatusBadRequest, err.Error(), nil))
+		httpclient.NewResponse(c, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	user, err := r.u.AuthRegister(request)
 
+	user, err := r.u.AuthRegister(request)
 	if err != nil {
-		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, err.Error(), nil))
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
 		return
 	}
-	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", user))
+	httpclient.NewResponse(c, http.StatusOK, "ok", user)
 }
 
 func (r *UserRoutes) GetInfo(c *gin.Context) {
 	tokenString := c.Request.Header.Get("Authorization")
 	if tokenString == "" {
-		c.JSON(http.StatusBadRequest, httpclient.NewResponse(http.StatusBadRequest, "No token header found", nil))
+		httpclient.NewResponse(c, http.StatusBadRequest, "No token header found", nil)
 		return
 	}
-	user, err := r.u.GetInfo(tokenString)
 
+	user, err := r.u.GetInfo(tokenString)
 	if err != nil {
-		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusBadRequest, err.Error(), nil))
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
 		return
 	}
-	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", user))
+	httpclient.NewResponse(c, http.StatusOK, "ok", user)
 }
 
 func (r *UserRoutes) UpdateInfo(c *gin.Context) {
 	request := entity.AuthRequest{}
 	if err := c.ShouldBind(&request); err != nil {
-		c.JSON(http.StatusBadRequest, httpclient.NewResponse(http.StatusBadRequest, err.Error(), nil))
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
 		return
 	}
+
 	err := r.u.UpdateInfo(request)
 	if err != nil {
-		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusBadRequest, err.Error(), nil))
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
 		return
 	}
-	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", nil))
+	httpclient.NewResponse(c, http.StatusOK, "ok", nil)
+}
+
+func (r *UserRoutes) GetCart(c *gin.Context) {
+	userID := int(c.MustGet("user_id").(float64))
+	cart, err := r.u.GetCart(userID)
+	if err != nil {
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
+		return
+	}
+	httpclient.NewResponse(c, http.StatusOK, "ok", cart)
 }

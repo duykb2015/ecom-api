@@ -83,7 +83,7 @@ type ProductItemsResponse struct {
 	Name       string                      `json:"name"`
 	Slug       string                      `json:"slug"`
 	Status     uint                        `json:"status"`
-	Attributes []ProductAttributesResponse `json:"attributes"`
+	Attributes []ProductAttributesResponse `json:"attributes,omitempty"`
 	Colors     []ProductItemColorsResponse `json:"colors"`
 	Images     []ProductItemImagesResponse `json:"images"`
 }

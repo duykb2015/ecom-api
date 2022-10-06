@@ -33,15 +33,15 @@ type Response struct {
 	Result  interface{} `json:"result,omitempty"`
 }
 
-func NewResponse(code int, msg string, result interface{}) Response {
-	return Response{
-		Code:    code,
-		Message: msg,
-		Result:  result,
-	}
-}
+// func NewResponse(code int, msg string, result interface{}) Response {
+// 	return Response{
+// 		Code:    code,
+// 		Message: msg,
+// 		Result:  result,
+// 	}
+// }
 
-func NewResponseWithGin(c *gin.Context, code int, msg string, result interface{}) {
+func NewResponse(c *gin.Context, code int, msg string, result interface{}) {
 	c.JSON(code, Response{
 		Code:    code,
 		Message: msg,
