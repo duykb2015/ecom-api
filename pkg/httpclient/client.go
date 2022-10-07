@@ -11,12 +11,13 @@ const (
 )
 
 const (
-	ErrBadRequest     = "Bad request"
-	ErrNoSuchUser     = "user_id not found"
-	ErrNotFound       = "Not Found"
-	ErrUnauthorized   = "Unauthorized"
-	ErrForbidden      = "Forbidden"
-	ErrBadQueryParams = "Invalid query params"
+	ErrBadRequest       = "Bad request"
+	ErrNoSuchUser       = "user_id not found"
+	ErrNotFound         = "Not Found"
+	ErrUnauthorized     = "Unauthorized"
+	ErrForbidden        = "Forbidden"
+	ErrBadQueryParams   = "Invalid query params"
+	ErrPasswordNotMatch = "Password does not match"
 )
 
 var (
@@ -32,15 +33,15 @@ type Response struct {
 	Result  interface{} `json:"result,omitempty"`
 }
 
-func NewResponse(code int, msg string, result interface{}) Response {
-	return Response{
-		Code:    code,
-		Message: msg,
-		Result:  result,
-	}
-}
+// func NewResponse(code int, msg string, result interface{}) Response {
+// 	return Response{
+// 		Code:    code,
+// 		Message: msg,
+// 		Result:  result,
+// 	}
+// }
 
-func NewResponseWithGin(c *gin.Context, code int, msg string, result interface{}) {
+func NewResponse(c *gin.Context, code int, msg string, result interface{}) {
 	c.JSON(code, Response{
 		Code:    code,
 		Message: msg,

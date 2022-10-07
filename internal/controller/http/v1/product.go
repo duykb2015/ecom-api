@@ -27,45 +27,45 @@ func NewProductRoutes(handler *gin.RouterGroup, p usecase.Product) {
 func (r *ProductRoutes) GetAllProduct(c *gin.Context) {
 	product, err := r.p.Get()
 	if err != nil {
-		c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "error", err))
+		httpclient.NewResponse(c, http.StatusBadRequest, "error", err)
 		return
 	}
-	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", product))
+	httpclient.NewResponse(c, http.StatusOK, "ok", product)
 
 }
 
 func (r *ProductRoutes) getByCategory(c *gin.Context) {
 	categoryID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, httpclient.NewResponse(http.StatusOK, "error", err))
+		httpclient.NewResponse(c, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
 
 	product, err := r.p.Category(categoryID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, httpclient.NewResponse(http.StatusOK, "error", err))
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", product))
+	httpclient.NewResponse(c, http.StatusOK, "ok", product)
 }
 
 func (r *ProductRoutes) GetHotDeal(c *gin.Context) {
 	product, err := r.p.GetHotDeal()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, httpclient.NewResponse(http.StatusOK, "error", err))
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", product))
+	httpclient.NewResponse(c, http.StatusOK, "ok", product)
 }
 
 func (r *ProductRoutes) GetLine(c *gin.Context) {
 	product, err := r.p.GetLine()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, httpclient.NewResponse(http.StatusOK, "error", err))
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, httpclient.NewResponse(http.StatusOK, "ok", product))
+	httpclient.NewResponse(c, http.StatusOK, "ok", product)
 }
