@@ -21,18 +21,20 @@ func (m *MenuRepo) GetParents() ([]entity.Menu, error) {
 	return menus, err
 }
 
-func (m *MenuRepo) GetChildens() ([]entity.Menu, error) {
+func (m *MenuRepo) GetChildens(menuIDs []int) ([]entity.Menu, error) {
 	menus := []entity.Menu{}
 	err := m.db.Table("menu").
-		Where("parent_id <> 0 AND status > 0").
+		// Where("parent_id <> 0 AND status > 0").
+		Where("parent_id IN ? AND status > 0", menuIDs).
 		Find(&menus).Error
 	return menus, err
 }
 
-func (m *MenuRepo) GetCategory(menuID int) ([]entity.Category, error) {
+func (m *MenuRepo) GetCategory(menuIDs int) ([]entity.Category, error) {
 	categorys := []entity.Category{}
 	err := m.db.Table("product_category").
-		Where("status > 0 AND menu_id = ?", menuID).
+		// Where("status > 0 AND menu_id = ?", menuID).
+		Where("status > 0 AND menu_id IN ?", menuIDs).
 		Find(&categorys).Error
 	return categorys, err
 }

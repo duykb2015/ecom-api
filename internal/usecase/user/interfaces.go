@@ -24,4 +24,7 @@ type User interface {
 	UpdateInfo(request entity.AuthRequest) error
 
 	GetCart(userID int) ([]entity.CartResponse, error)
+	AddItemToCart(cartInfo entity.CartRequest) bool
+	UpdateCart(cartInfo entity.CartRequest) bool
+	DeleteCart(cartID int) bool
 }

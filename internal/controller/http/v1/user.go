@@ -21,11 +21,12 @@ func NewUserRoutes(handler *gin.RouterGroup, u usecase.User, mw *middleware.Midd
 		h.POST("login", r.Login)
 		h.POST("register", r.Register)
 		h.Use(mw.AuthJWTMiddleWare())
-
 		h.GET("getinfo", r.GetInfo)
-		h.GET("/cart", r.GetCart)
 		h.PUT("update", r.UpdateInfo)
-
+		h.GET("cart", r.GetCart)
+		h.POST("cart/add", r.AddItemToCart)
+		h.PUT("cart/update", r.UpdateCart)
+		h.DELETE("cart/delete", r.DeleteCart)
 	}
 }
 
@@ -90,6 +91,36 @@ func (r *UserRoutes) UpdateInfo(c *gin.Context) {
 }
 
 func (r *UserRoutes) GetCart(c *gin.Context) {
+	userID := int(c.MustGet("user_id").(float64))
+	cart, err := r.u.GetCart(userID)
+	if err != nil {
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
+		return
+	}
+	httpclient.NewResponse(c, http.StatusOK, "ok", cart)
+}
+
+func (r *UserRoutes) AddItemToCart(c *gin.Context) {
+	userID := int(c.MustGet("user_id").(float64))
+	cart, err := r.u.GetCart(userID)
+	if err != nil {
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
+		return
+	}
+	httpclient.NewResponse(c, http.StatusOK, "ok", cart)
+}
+
+func (r *UserRoutes) UpdateCart(c *gin.Context) {
+	userID := int(c.MustGet("user_id").(float64))
+	cart, err := r.u.GetCart(userID)
+	if err != nil {
+		httpclient.NewResponse(c, http.StatusBadRequest, err.Error(), nil)
+		return
+	}
+	httpclient.NewResponse(c, http.StatusOK, "ok", cart)
+}
+
+func (r *UserRoutes) DeleteCart(c *gin.Context) {
 	userID := int(c.MustGet("user_id").(float64))
 	cart, err := r.u.GetCart(userID)
 	if err != nil {
