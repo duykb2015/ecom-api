@@ -28,15 +28,22 @@ func (uc *MenuUsecase) Get() ([]entity.MenuResponse, error) {
 	}
 
 	childens := []entity.Menu{}
+	// categorys := []entity.Category{}
 	if len(menuIDs) > 0 {
 		childens, err = uc.repo.GetChildens(menuIDs)
 		if err != nil {
 			return resp, err
 		}
+
+		// categorys, err = uc.repo.GetCategory(menuIDs)
+		// if err != nil {
+		// 	return resp, err
+		// }
 	}
 
 	for _, parent := range parents {
 		subMenus := make([]entity.MenuResponse, 0)
+		// categoryResp := make([]entity.CategoryResponse, 0)
 		for _, childen := range childens {
 			if childen.ParentID == parent.ID {
 				subMenus = append(subMenus, entity.MenuResponse{
@@ -48,6 +55,9 @@ func (uc *MenuUsecase) Get() ([]entity.MenuResponse, error) {
 				})
 			}
 		}
+
+		// for _, category := range categorys {
+		// }
 
 		resp = append(resp, entity.MenuResponse{
 			ID:       parent.ID,
@@ -118,7 +128,7 @@ func (uc *MenuUsecase) _Get() ([]entity.MenuResponse, error) {
 func (uc *MenuUsecase) GetCategory(menuIDs int) ([]entity.CategoryResponse, error) {
 	resp := make([]entity.CategoryResponse, 0)
 
-	categorys, err := uc.repo.GetCategory(menuIDs)
+	categorys, err := uc.repo.GetCategory(nil)
 	if err != nil {
 		return resp, err
 	}

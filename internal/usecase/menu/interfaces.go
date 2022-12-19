@@ -7,7 +7,7 @@ type (
 	MenuRepo interface {
 		GetParents() ([]entity.Menu, error)
 		GetChildens(menuIDs []int) ([]entity.Menu, error)
-		GetCategory(menuID int) ([]entity.Category, error)
+		GetCategory(menuID []int) ([]entity.Category, error)
 	}
 	Menu interface {
 		Get() ([]entity.MenuResponse, error)

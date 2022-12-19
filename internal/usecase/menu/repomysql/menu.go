@@ -30,7 +30,7 @@ func (m *MenuRepo) GetChildens(menuIDs []int) ([]entity.Menu, error) {
 	return menus, err
 }
 
-func (m *MenuRepo) GetCategory(menuIDs int) ([]entity.Category, error) {
+func (m *MenuRepo) GetCategory(menuIDs []int) ([]entity.Category, error) {
 	categorys := []entity.Category{}
 	err := m.db.Table("product_category").
 		// Where("status > 0 AND menu_id = ?", menuID).
